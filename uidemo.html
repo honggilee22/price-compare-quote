@@ -1,0 +1,751 @@
+﻿<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>가격 비교</title>
+    <style>
+      :root {
+        --bg-1: #f7fbff;
+        --bg-2: #eaf3ff;
+        --bg-3: #ffece6;
+        --ink: #1f2937;
+        --muted: #6b7280;
+        --line: #e5eaf0;
+        --line-width: 2px;
+        --card: #ffffff;
+        --accent: #ff6b6b;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Pretendard", "SUIT", "Noto Sans KR", "Apple SD Gothic Neo",
+          "Malgun Gothic", sans-serif;
+        color: var(--ink);
+        background: radial-gradient(circle at 10% 15%, #ffffff 0%, #ffffff00 45%),
+          radial-gradient(circle at 90% 10%, #ffffffcc 0%, #ffffff00 50%),
+          linear-gradient(140deg, var(--bg-1) 0%, var(--bg-2) 50%, var(--bg-3) 100%);
+      }
+
+      .canvas {
+        width: 2000px;
+        height: 1200px;
+        margin: 0 auto;
+        padding: 20px 28px;
+        position: relative;
+        display: grid;
+        grid-template-rows: auto auto auto;
+        gap: 12px;
+        align-content: start;
+      }
+
+      .menu {
+        display: flex;
+        align-items: center;
+        height: 44px;
+        background: var(--card);
+        border: var(--line-width) solid var(--line);
+        border-radius: 12px;
+        overflow: hidden;
+      }
+
+      .menu button {
+        border: none;
+        background: transparent;
+        padding: 0 16px;
+        height: 100%;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .menu button.active {
+        color: #ffffff;
+        background: linear-gradient(135deg, #ff7f7f, #ffb18a);
+      }
+
+      .divider {
+        width: var(--line-width);
+        height: 100%;
+        background: var(--line);
+      }
+
+      .summary {
+        height: 44px;
+        border: var(--line-width) solid var(--line);
+        border-radius: 12px;
+        background: var(--card);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--accent);
+      }
+
+      .summary-action {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        height: 28px;
+        padding: 0 10px;
+        border-radius: 8px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+      }
+
+      .plans {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        align-items: stretch;
+      }
+
+      .plan {
+        background: var(--card);
+        border: var(--line-width) solid var(--line);
+        border-radius: 16px;
+        padding: 12px;
+        display: grid;
+        gap: 10px;
+        align-content: start;
+      }
+
+      .plan-head {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        align-items: center;
+        gap: 12px;
+      }
+
+      .plan-title {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .total-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 6px 10px;
+        border-radius: 10px;
+        border: var(--line-width) solid var(--line);
+        background: #f7f9fc;
+      }
+
+      .total-label {
+        color: var(--muted);
+        font-size: 14px;
+      }
+
+      .total-value {
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .add-btn {
+        width: 34px;
+        height: 34px;
+        border-radius: 8px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--ink);
+      }
+
+      .prepay {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 13px;
+        color: var(--muted);
+      }
+
+      .check {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 3px 8px;
+        border-radius: 8px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        color: var(--ink);
+      }
+
+      .check input {
+        accent-color: var(--accent);
+      }
+
+      .check span {
+        font-weight: 600;
+      }
+
+      .table {
+        display: grid;
+        gap: 4px;
+      }
+
+      .row {
+        display: grid;
+        grid-template-columns: 1.4fr 1fr 0.8fr 1fr;
+        gap: 8px;
+        align-items: center;
+        padding: 6px 8px;
+        border-radius: 8px;
+        font-size: 13px;
+        text-align: right;
+      }
+
+      .row.header {
+        background: #f5f7fb;
+        color: var(--muted);
+        border: var(--line-width) solid var(--line);
+        font-weight: 600;
+      }
+
+      .row.data {
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+      }
+
+      .cell {
+        width: 100%;
+      }
+
+      input.cell {
+        height: 26px;
+        border: var(--line-width) solid var(--line);
+        border-radius: 6px;
+        padding: 0 8px;
+        font-size: 13px;
+        background: #ffffff;
+        color: var(--ink);
+        text-align: right;
+      }
+
+      .row-total {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+
+      .row-total-value {
+        font-weight: 600;
+        color: var(--accent);
+      }
+
+      .row-delete {
+        height: 22px;
+        padding: 0 8px;
+        border-radius: 6px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 11px;
+        font-weight: 600;
+      }
+
+      .canvas.catalog-open .summary,
+      .canvas.catalog-open .quote,
+      .canvas.catalog-open .plans {
+        display: none;
+      }
+
+      .catalog-view {
+        position: absolute;
+        top: 56px;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: none;
+      }
+
+      .canvas.catalog-open .catalog-view {
+        display: block;
+      }
+
+      .catalog-frame {
+        width: 100%;
+        height: 100%;
+        border: var(--line-width) solid var(--line);
+        border-radius: 12px;
+        background: #ffffff;
+      }
+
+      .quote {
+        border: var(--line-width) solid var(--line);
+        border-radius: 12px;
+        background: var(--card);
+        padding: 10px 14px;
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr 0.9fr 1.4fr;
+        gap: 12px;
+        align-items: center;
+        font-size: 13px;
+      }
+
+      .quote-field {
+        display: grid;
+        gap: 6px;
+      }
+
+      .quote-label {
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 12px;
+      }
+
+      .quote-input {
+        height: 30px;
+        border: var(--line-width) solid var(--line);
+        border-radius: 8px;
+        padding: 0 10px;
+        font-size: 13px;
+        background: #ffffff;
+        color: var(--ink);
+      }
+
+      .quote-input-group {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+
+      .quote-suffix {
+        height: 30px;
+        padding: 0 10px;
+        border-radius: 8px;
+        border: var(--line-width) solid var(--line);
+        background: #f7f9fc;
+        color: var(--muted);
+        font-weight: 600;
+        font-size: 13px;
+        display: inline-flex;
+        align-items: center;
+        white-space: nowrap;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="canvas">
+      <div class="menu">
+        <button class="active" type="button" data-view="price">가격비교</button>
+        <span class="divider"></span>
+        <button type="button" data-view="catalog">카탈로그 비교</button>
+        <span class="divider"></span>
+        <button type="button" disabled>접수 안내</button>
+        <span class="divider"></span>
+        <button type="button" disabled>견적서 발송</button>
+        <span class="divider"></span>
+        <button type="button" disabled>부품 신청</button>
+      </div>
+
+      <div class="summary" id="summary">
+        <span id="summary-text">차이 0원</span>
+        <button class="summary-action" type="button" id="export-csv">CSV 저장</button>
+      </div>
+
+      <div class="quote">
+        <label class="quote-field">
+          <span class="quote-label">수신</span>
+          <span class="quote-input-group">
+            <input class="quote-input" id="quote-recipient" type="text" placeholder="예: 이홍기" />
+            <span class="quote-suffix">귀하</span>
+          </span>
+        </label>
+        <label class="quote-field">
+          <span class="quote-label">내선번호</span>
+          <input class="quote-input" id="quote-ext" type="text" inputmode="numeric" placeholder="예: 1234" />
+        </label>
+        <label class="quote-field">
+          <span class="quote-label">견적일</span>
+          <input class="quote-input" type="date" id="quote-date" />
+        </label>
+        <label class="quote-field">
+          <span class="quote-label">이메일 주소</span>
+          <input class="quote-input" id="quote-email" type="email" placeholder="name@example.com" />
+        </label>
+      </div>
+
+      <div class="plans">
+        <div class="plan" data-plan="1">
+          <div class="plan-head">
+            <span class="plan-title">1안</span>
+            <div class="total-box">
+              <span class="total-label">총액</span>
+              <span class="total-value" data-total>0원</span>
+            </div>
+            <button class="add-btn" type="button" data-add>+</button>
+          </div>
+          <div class="prepay">
+            <span>선납</span>
+            <label class="check"><input type="radio" name="prepay1" value="0" checked /><span>월납</span></label>
+            <label class="check"><input type="radio" name="prepay1" value="0.06" /><span>6%</span></label>
+            <label class="check"><input type="radio" name="prepay1" value="0.10" /><span>10%</span></label>
+          </div>
+          <div class="table">
+            <div class="row header">
+              <span>모델</span>
+              <span>가격</span>
+              <span>대수</span>
+              <span>총가격</span>
+            </div>
+            <div class="row data">
+              <input class="cell model" type="text" />
+              <input class="cell price" type="number" min="0" />
+              <input class="cell qty" type="number" min="0" />
+              <div class="cell row-total">
+                <span class="row-total-value">0원</span>
+                <button class="row-delete" type="button">삭제</button>
+              </div>
+            </div>
+            <div class="row data">
+              <input class="cell model" type="text" />
+              <input class="cell price" type="number" min="0" />
+              <input class="cell qty" type="number" min="0" />
+              <div class="cell row-total">
+                <span class="row-total-value">0원</span>
+                <button class="row-delete" type="button">삭제</button>
+              </div>
+            </div>
+            <div class="row data">
+              <input class="cell model" type="text" />
+              <input class="cell price" type="number" min="0" />
+              <input class="cell qty" type="number" min="0" />
+              <div class="cell row-total">
+                <span class="row-total-value">0원</span>
+                <button class="row-delete" type="button">삭제</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="plan" data-plan="2">
+          <div class="plan-head">
+            <span class="plan-title">2안</span>
+            <div class="total-box">
+              <span class="total-label">총액</span>
+              <span class="total-value" data-total>0원</span>
+            </div>
+            <button class="add-btn" type="button" data-add>+</button>
+          </div>
+          <div class="prepay">
+            <span>선납</span>
+            <label class="check"><input type="radio" name="prepay2" value="0" checked /><span>월납</span></label>
+            <label class="check"><input type="radio" name="prepay2" value="0.06" /><span>6%</span></label>
+            <label class="check"><input type="radio" name="prepay2" value="0.10" /><span>10%</span></label>
+          </div>
+          <div class="table">
+            <div class="row header">
+              <span>모델</span>
+              <span>가격</span>
+              <span>대수</span>
+              <span>총가격</span>
+            </div>
+            <div class="row data">
+              <input class="cell model" type="text" />
+              <input class="cell price" type="number" min="0" />
+              <input class="cell qty" type="number" min="0" />
+              <div class="cell row-total">
+                <span class="row-total-value">0원</span>
+                <button class="row-delete" type="button">삭제</button>
+              </div>
+            </div>
+            <div class="row data">
+              <input class="cell model" type="text" />
+              <input class="cell price" type="number" min="0" />
+              <input class="cell qty" type="number" min="0" />
+              <div class="cell row-total">
+                <span class="row-total-value">0원</span>
+                <button class="row-delete" type="button">삭제</button>
+              </div>
+            </div>
+            <div class="row data">
+              <input class="cell model" type="text" />
+              <input class="cell price" type="number" min="0" />
+              <input class="cell qty" type="number" min="0" />
+              <div class="cell row-total">
+                <span class="row-total-value">0원</span>
+                <button class="row-delete" type="button">삭제</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="catalog-view">
+        <iframe
+          class="catalog-frame"
+          id="catalog-frame"
+          title="카탈로그"
+          loading="lazy"
+        ></iframe>
+      </div>
+    </div>
+
+    <script>
+      const format = new Intl.NumberFormat("ko-KR");
+
+      function parseNumber(value) {
+        const num = String(value || "").replace(/[^0-9]/g, "");
+        return Number(num || 0);
+      }
+
+      function formatWon(value) {
+        return `${format.format(value)}원`;
+      }
+
+      function getDiscount(plan) {
+        const checked = plan.querySelector('.prepay input[type="radio"]:checked');
+        if (!checked) return 0;
+        return Number(checked.value || 0);
+      }
+
+      function updatePlan(plan) {
+        let sum = 0;
+        const rows = plan.querySelectorAll(".row.data");
+        rows.forEach((row) => {
+          const price = parseNumber(row.querySelector(".price").value);
+          const qty = parseNumber(row.querySelector(".qty").value);
+          const total = price * qty;
+          const totalEl = row.querySelector(".row-total-value") || row.querySelector(".row-total");
+          totalEl.textContent = formatWon(total);
+          sum += total;
+        });
+        const discount = getDiscount(plan);
+        const discountedTotal = Math.round(sum * (1 - discount));
+        plan.querySelector("[data-total]").textContent = formatWon(discountedTotal);
+        return discountedTotal;
+      }
+
+      function updateSummary(total1, total2) {
+        const summary =
+          document.getElementById("summary-text") || document.getElementById("summary");
+        if (total2 < total1) {
+          const diff = total1 - total2;
+          summary.textContent = `연 ${formatWon(diff * 12)} 할인 / 월 ${formatWon(diff)} 할인`;
+          return;
+        }
+        if (total2 > total1) {
+          summary.textContent = `월 ${formatWon(total2 - total1)} 추가`;
+          return;
+        }
+        summary.textContent = "차이 0원";
+      }
+
+      function collectPlanData(plan, label) {
+        if (!plan) return { label, rows: [], total: 0 };
+        const rows = [];
+        plan.querySelectorAll(".row.data").forEach((row) => {
+          const model = row.querySelector(".model").value.trim();
+          const price = parseNumber(row.querySelector(".price").value);
+          const qty = parseNumber(row.querySelector(".qty").value);
+          if (!model && !price && !qty) return;
+          rows.push({
+            model,
+            price,
+            qty,
+            total: price * qty,
+          });
+        });
+        const total = parseNumber(plan.querySelector("[data-total]").textContent);
+        return { label, rows, total };
+      }
+
+      function csvEscape(value) {
+        const text = String(value ?? "");
+        if (/[",\r\n]/.test(text)) {
+          return `"${text.replace(/"/g, '""')}"`;
+        }
+        return text;
+      }
+
+      function buildCsvRows() {
+        const recipientInput = document.getElementById("quote-recipient");
+        const recipientName = recipientInput ? recipientInput.value.trim() : "";
+        const recipientLabel = recipientName ? `${recipientName} 귀하` : "";
+        const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
+        const quoteDate = document.getElementById("quote-date")?.value ?? "";
+        const email = document.getElementById("quote-email")?.value.trim() ?? "";
+
+        const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "1안");
+        const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "2안");
+        const diff = plan2.total - plan1.total;
+        const diffYear = diff * 12;
+        const monthlyJudge =
+          diff === 0
+            ? "차이 없음"
+            : diff < 0
+              ? `2안이 월 ${format.format(Math.abs(diff))}원 저렴`
+              : `2안이 월 ${format.format(diff)}원 추가`;
+        const yearlyJudge =
+          diffYear === 0
+            ? "차이 없음"
+            : diffYear < 0
+              ? `2안이 연 ${format.format(Math.abs(diffYear))}원 저렴`
+              : `2안이 연 ${format.format(diffYear)}원 추가`;
+
+        const rows = [];
+        rows.push(["구분", "항목", "값"]);
+        rows.push(["견적정보", "수신", recipientLabel]);
+        rows.push(["견적정보", "내선번호", ext]);
+        rows.push(["견적정보", "견적일", quoteDate]);
+        rows.push(["견적정보", "이메일", email]);
+        rows.push([]);
+        rows.push(["구분", "안", "모델", "가격", "대수", "총가격"]);
+        plan1.rows.forEach((item) => {
+          rows.push(["제품", "1안", item.model, item.price, item.qty, item.total]);
+        });
+        plan2.rows.forEach((item) => {
+          rows.push(["제품", "2안", item.model, item.price, item.qty, item.total]);
+        });
+        rows.push([]);
+        rows.push(["요약", "항목", "1안", "2안", "차이(2안-1안)", "판단"]);
+        rows.push(["요약", "월 총액", plan1.total, plan2.total, diff, monthlyJudge]);
+        rows.push([
+          "요약",
+          "연 환산",
+          plan1.total * 12,
+          plan2.total * 12,
+          diffYear,
+          yearlyJudge,
+        ]);
+        return rows;
+      }
+
+      function sanitizeFileNamePart(text) {
+        return String(text || "")
+          .replace(/[\\/:*?"<>|]/g, "_")
+          .replace(/\s+/g, "");
+      }
+
+      function formatKoreanDate(inputValue) {
+        if (!inputValue) {
+          const now = new Date();
+          const month = String(now.getMonth() + 1).padStart(2, "0");
+          const day = String(now.getDate()).padStart(2, "0");
+          return `${month}월${day}일`;
+        }
+        const parts = inputValue.split("-");
+        if (parts.length !== 3) return inputValue;
+        const month = parts[1].padStart(2, "0");
+        const day = parts[2].padStart(2, "0");
+        return `${month}월${day}일`;
+      }
+
+      function downloadCsv() {
+        updateAll();
+        const rows = buildCsvRows();
+        const csv = "\ufeff" + rows.map((row) => row.map(csvEscape).join(",")).join("\r\n");
+        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        const recipientName = document.getElementById("quote-recipient")?.value.trim() ?? "";
+        const quoteDate = document.getElementById("quote-date")?.value ?? "";
+        const recipientLabel = recipientName ? `${recipientName}귀하` : "견적서";
+        const dateLabel = formatKoreanDate(quoteDate);
+        const fileName = `${sanitizeFileNamePart(recipientLabel)}${dateLabel}.csv`;
+        link.href = url;
+        link.download = fileName;
+        document.body.appendChild(link);
+        link.click();
+        link.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 1000);
+      }
+
+      function createRow() {
+        const row = document.createElement("div");
+        row.className = "row data";
+        row.innerHTML = `
+          <input class="cell model" type="text" />
+          <input class="cell price" type="number" min="0" />
+          <input class="cell qty" type="number" min="0" />
+          <div class="cell row-total">
+            <span class="row-total-value">0원</span>
+            <button class="row-delete" type="button">삭제</button>
+          </div>
+        `;
+        return row;
+      }
+
+      function setDefaultQuoteDate() {
+        const dateInput = document.getElementById("quote-date");
+        if (!dateInput || dateInput.value) return;
+        const now = new Date();
+        const tzOffsetMs = now.getTimezoneOffset() * 60000;
+        const localISO = new Date(now - tzOffsetMs).toISOString().slice(0, 10);
+        dateInput.value = localISO;
+      }
+
+      function updateAll() {
+        const plan1 = document.querySelector('[data-plan="1"]');
+        const plan2 = document.querySelector('[data-plan="2"]');
+        const total1 = updatePlan(plan1);
+        const total2 = updatePlan(plan2);
+        updateSummary(total1, total2);
+      }
+
+      function setView(view) {
+        const canvas = document.querySelector(".canvas");
+        const frame = document.getElementById("catalog-frame");
+        const menuButtons = document.querySelectorAll(".menu button[data-view]");
+        if (view === "catalog") {
+          if (!frame.src) {
+            frame.src = "https://www.chungho.co.kr/newch/prod_list?menu=2&cate=all";
+          }
+          canvas.classList.add("catalog-open");
+        } else {
+          canvas.classList.remove("catalog-open");
+        }
+        menuButtons.forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.view === view);
+        });
+      }
+
+      document.querySelectorAll(".menu button[data-view]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          setView(btn.dataset.view);
+        });
+      });
+
+      const exportBtn = document.getElementById("export-csv");
+      if (exportBtn) {
+        exportBtn.addEventListener("click", downloadCsv);
+      }
+
+      document.querySelectorAll(".plan").forEach((plan) => {
+        plan.addEventListener("input", updateAll);
+        plan.addEventListener("click", (event) => {
+          const deleteBtn = event.target.closest(".row-delete");
+          if (!deleteBtn) return;
+          const row = deleteBtn.closest(".row.data");
+          if (!row) return;
+          row.remove();
+          updateAll();
+        });
+        plan.querySelectorAll('.prepay input[type="radio"]').forEach((input) => {
+          input.addEventListener("change", updateAll);
+        });
+        plan.querySelector("[data-add]").addEventListener("click", () => {
+          plan.querySelector(".table").appendChild(createRow());
+          updateAll();
+        });
+      });
+
+      setDefaultQuoteDate();
+      setView("price");
+      updateAll();
+    </script>
+  </body>
+</html>

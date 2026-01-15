@@ -1,0 +1,90 @@
+﻿<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <style>
+      html, body {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      #frame-wrapper {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+      }
+
+      #frame {
+        border: 0;
+        display: block;
+      }
+    </style>
+    <script src="streamlit-component-lib.js"></script>
+  </head>
+  <body>
+    <div id="frame-wrapper">
+      <iframe id="frame" sandbox="allow-scripts allow-same-origin"></iframe>
+    </div>
+
+    <script>
+      const frame = document.getElementById("frame");
+      let lastResponseId = null;
+      let currentHash = null;
+
+      function handleRender(event) {
+        const data = event.detail;
+        const args = data.args || {};
+        if (args.html && args.html_hash && args.html_hash !== currentHash) {
+          currentHash = args.html_hash;
+          frame.srcdoc = args.html;
+        }
+        const contentWidth = args.content_width || args.width;
+        const contentHeight = args.content_height || args.height;
+        if (contentWidth) {
+          frame.style.width = `${contentWidth}px`;
+        } else {
+          frame.style.width = "100%";
+        }
+        if (contentHeight) {
+          frame.style.height = `${contentHeight}px`;
+        } else {
+          frame.style.height = "100%";
+        }
+        if (args.height) {
+          Streamlit.setFrameHeight(args.height);
+        } else {
+          Streamlit.setFrameHeight();
+        }
+
+        const response = args.response;
+        if (response && response.id && response.id !== lastResponseId) {
+          lastResponseId = response.id;
+          if (response.type === "pdf") {
+            const link = document.createElement("a");
+            link.href = `data:application/pdf;base64,${response.content}`;
+            link.download = response.filename || "quote.pdf";
+            document.body.appendChild(link);
+            link.click();
+            link.remove();
+            if (response.message) {
+              alert(response.message);
+            }
+          } else if (response.type === "message") {
+            alert(response.message || "");
+          }
+        }
+      }
+
+      Streamlit.events.addEventListener(Streamlit.RENDER_EVENT, handleRender);
+      Streamlit.setComponentReady();
+      Streamlit.setFrameHeight();
+
+      window.addEventListener("message", (event) => {
+        if (!event.data || event.data.source !== "price-compare") return;
+        Streamlit.setComponentValue(event.data.payload);
+      });
+    </script>
+  </body>
+</html>
