@@ -25,7 +25,7 @@
   </head>
   <body>
     <div id="frame-wrapper">
-      <iframe id="frame" sandbox="allow-scripts allow-same-origin"></iframe>
+      <iframe id="frame"></iframe>
     </div>
 
     <script>
@@ -70,6 +70,13 @@
             link.remove();
             if (response.message) {
               alert(response.message);
+            }
+          } else if (response.type === "preview") {
+            if (frame && frame.contentWindow) {
+              frame.contentWindow.postMessage(
+                { source: "price-compare-response", payload: response },
+                "*"
+              );
             }
           } else if (response.type === "message") {
             alert(response.message || "");

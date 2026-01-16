@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>교체 안내 (고객용)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --line:#e6e8ef;
+      --ink:#111827;
+      --muted:#6b7280;
+
+      /* 요청 색상 */
+      --titleBlue:#2563eb;         /* 타이틀 파란 배경 */
+      --titleBlueDeep:#1d4ed8;
+      --contentOrange:#fff3e6;     /* 내용 옅은 주황 칸 */
+      --contentOrangeLine:#ffd7b0; /* 주황 테두리 */
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.65;
+    }
+
+    :root{
+      --toc-width:260px;
+      --toc-gap:20px;
+    }
+
+    .layout{
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px 16px 60px;
+      padding-left:calc(var(--toc-width) + var(--toc-gap) + 16px);
+      display:block;
+    }
+
+    /* ===== 목차 (왼쪽 고정 레이어) ===== */
+    .toc{
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      width:var(--toc-width);
+      z-index:10;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      padding:16px 12px 20px;
+      background:#ffffff;
+      border-right:1px solid var(--line);
+      overflow-y:auto;
+    }
+
+    .toc-title{
+      font-size:13px;
+      color:var(--muted);
+      margin:0 0 6px;
+      font-weight:700;
+    }
+
+    .toc a{
+      display:flex;
+      text-decoration:none;
+      color:var(--ink);
+      font-size:13px;
+      padding:6px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+      margin:0;
+      line-height:1.4;
+    }
+    .toc a:hover{
+      border-color:var(--line);
+      background:#f9fafb;
+    }
+    .toc a.active{
+      background:#eef2ff;
+      border-color:#c7d2fe;
+      color:#1e40af;
+      font-weight:800;
+    }
+
+    /* ===== 본문 섹션 ===== */
+    .section{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      margin:0 auto 16px;
+      scroll-margin-top:18px;
+    }
+
+    /* 타이틀(파란색) */
+    .section-head{
+      background:linear-gradient(0deg,var(--titleBlue),var(--titleBlueDeep));
+      color:#fff;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .section-num{
+      width:32px;
+      height:32px;
+      border-radius:10px;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:14px;
+      flex:0 0 auto;
+    }
+    .section-title{
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:-0.2px;
+    }
+
+    /* 내용(옅은 주황 칸) */
+    .section-body{
+      padding:16px;
+    }
+    .content-box{
+      background:var(--contentOrange);
+      border:1px solid var(--contentOrangeLine);
+      border-radius:14px;
+      padding:14px 14px;
+      font-size:15px;
+      color:#1f2937;
+    }
+    .content-box .hint{
+      margin-top:10px;
+      font-size:13px;
+      color:#7c2d12;
+      opacity:.9;
+    }
+
+    /* 모바일 */
+    @media (max-width: 980px){
+      :root{
+        --toc-width:100%;
+        --toc-gap:0px;
+      }
+      .layout{
+        padding-left:16px;
+        padding-top:120px;
+      }
+      .toc{
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom:auto;
+        width:100%;
+        flex-direction:row;
+        align-items:center;
+        overflow-x:auto;
+        overflow-y:hidden;
+        white-space:nowrap;
+      }
+      .toc a{
+        display:inline-flex;
+        border-radius:999px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- ===== 목차(클릭하면 해당 섹션으로 이동) ===== -->
+  <nav class="toc" aria-label="목차">
+    <p class="toc-title">목차 (클릭해서 바로 이동)</p>
+
+    <!-- ✅ 아래 제목은 네가 정한 순서대로. 필요하면 텍스트만 바꿔 -->
+    <a href="#s01">1. 신뢰 먼저</a>
+    <a href="#s02">2. 방문 목적</a>
+    <a href="#s03">3. 고객 반박</a>
+    <a href="#s04">4. 약정기간 vs 소유권 이전기간</a>
+    <a href="#s05">5. 현재 구간 = 비용 없음</a>
+    <a href="#s06">6. 왜 지금 교체 시기인지</a>
+    <a href="#s07">7. 관공서는 대부분 이렇게 한다</a>
+    <a href="#s08">8. 쉽게 요약(신제품/스펙업/합리적)</a>
+    <a href="#s09">9. 고객 질문(꼭 바꿔야?)</a>
+    <a href="#s10">10. 의무 아님</a>
+    <a href="#s11">11. 그래도 대부분 바꾸는 이유</a>
+    <a href="#s12">12. 고객 거절</a>
+    <a href="#s13">13. 거절 후 공감</a>
+    <a href="#s14">14. 걱정 해결 선언(내가 처리)</a>
+    <a href="#s15">15. 비용 리스크 차단</a>
+    <a href="#s16">16. 계약서 제공 시점</a>
+    <a href="#s18">18. 고객이 “할게요”</a>
+    <a href="#s19">19. (이후) 회사 변경 언급</a>
+    <a href="#s20">20. 마지막 통신사 비유</a>
+    <a href="#s17">17. (맨 마지막) 관리 방식 제시</a>
+  </nav>
+
+  <!-- ===== 본문 ===== -->
+  <main>
+    <!-- ✅ 각 content-box 안에 네가 정리한 본문을 붙여 넣으면 됨 -->
+
+    <section class="section" id="s01">
+      <div class="section-head">
+        <div class="section-num">1</div>
+        <div class="section-title">신뢰 먼저</div>
+      </div>
+      <div class="section-body">
+        <div class="content-box">
+          <!-- 여기에 본문 입력 -->
+          <b>[여기에 네 문장 붙여넣기]</b>
+          <div class="hint">※ 고객에게 보여주는 문장만. (나/프로그램 설명 X)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="s02">
+      <div class="section-head"><div class="section-num">2</div><div class="section-title">방문 목적</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s03">
+      <div class="section-head"><div class="section-num">3</div><div class="section-title">고객 반박</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s04">
+      <div class="section-head"><div class="section-num">4</div><div class="section-title">약정기간 vs 소유권 이전기간</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s05">
+      <div class="section-head"><div class="section-num">5</div><div class="section-title">현재 구간 = 비용 없음</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s06">
+      <div class="section-head"><div class="section-num">6</div><div class="section-title">왜 지금 교체 시기인지</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s07">
+      <div class="section-head"><div class="section-num">7</div><div class="section-title">관공서는 대부분 이렇게 한다</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s08">
+      <div class="section-head"><div class="section-num">8</div><div class="section-title">쉽게 요약(신제품/스펙업/합리적)</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s09">
+      <div class="section-head"><div class="section-num">9</div><div class="section-title">고객 질문(꼭 바꿔야?)</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s10">
+      <div class="section-head"><div class="section-num">10</div><div class="section-title">의무 아님</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s11">
+      <div class="section-head"><div class="section-num">11</div><div class="section-title">그래도 대부분 바꾸는 이유</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s12">
+      <div class="section-head"><div class="section-num">12</div><div class="section-title">고객 거절</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s13">
+      <div class="section-head"><div class="section-num">13</div><div class="section-title">거절 후 공감</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s14">
+      <div class="section-head"><div class="section-num">14</div><div class="section-title">걱정 해결 선언(내가 처리)</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s15">
+      <div class="section-head"><div class="section-num">15</div><div class="section-title">비용 리스크 차단</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s16">
+      <div class="section-head"><div class="section-num">16</div><div class="section-title">계약서 제공 시점</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s18">
+      <div class="section-head"><div class="section-num">18</div><div class="section-title">고객이 “할게요”</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s19">
+      <div class="section-head"><div class="section-num">19</div><div class="section-title">(이후) 회사 변경 언급</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s20">
+      <div class="section-head"><div class="section-num">20</div><div class="section-title">마지막 통신사 비유</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s17">
+      <div class="section-head"><div class="section-num">17</div><div class="section-title">(맨 마지막) 관리 방식 제시</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // 목차 active 하이라이트 (스크롤 따라다님)
+  const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+  const sections = tocLinks
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  function setActive() {
+    let current = sections[0];
+    for (const sec of sections) {
+      const top = sec.getBoundingClientRect().top;
+      if (top <= 140) current = sec;
+      else break;
+    }
+    tocLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${current.id}`);
+    });
+  }
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+</script>
+
+</body>
+</html>
