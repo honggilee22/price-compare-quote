@@ -26,14 +26,18 @@ TEMPLATE_PATH = Path(__file__).with_name("SS.xlsx")
 COMPONENT_DIR = Path(__file__).with_name("components") / "price_compare"
 CONFIG_PATH = Path(__file__).with_name("output") / "app_settings.json"
 DEFAULT_SAVE_DIR = Path(__file__).with_name("output") / "quotes"
+CATALOG_PATH = Path(__file__).with_name("0817_with_air_no_links_fixed.html")
+DEMO1_PATH = Path(__file__).with_name("demo1.html")
+CSV_PATHS = [
+    Path(__file__).with_name("청호가격_정수기.csv"),
+    Path(__file__).with_name("청호가격_비데_청정기.csv"),
+]
 
 HARDCODE_GMAIL_USER = "jumsune2@gmail.com"
 HARDCODE_GMAIL_APP_PASSWORD = ""
 
 MAX_TEMPLATE_ROWS = 9
 COMPONENT_HEIGHT = 1200
-CONTENT_WIDTH = 2000
-CONTENT_HEIGHT = 1200
 
 BRIDGE_SCRIPT = """<script id=\"price-compare-bridge\">
 (function() {
@@ -91,23 +95,13 @@ BRIDGE_SCRIPT = """<script id=\"price-compare-bridge\">
     });
   }
 
-  function enableSendButton() {
-    const buttons = document.querySelectorAll(".menu button");
-    const sendBtn = Array.from(buttons).find(
-      (btn) => btn.textContent.replace(/\\s+/g, "") === "견적서발송"
-    );
-    if (!sendBtn) return;
-
-    sendBtn.disabled = false;
-    sendBtn.addEventListener("click", () => {
-      updateAll();
-      post("send_email");
-    });
-  }
+  window.PriceCompareBridge = {
+    post: post,
+    buildPayload: buildPayload
+  };
 
   function init() {
     ensurePdfButton();
-    enableSendButton();
   }
 
   if (document.readyState === "loading") {
@@ -117,6 +111,14 @@ BRIDGE_SCRIPT = """<script id=\"price-compare-bridge\">
   }
 })();
 </script>
+"""
+
+RESPONSIVE_CSS = """
+.container{width:100%;max-width:960px;margin:0 auto;}
+img,video{max-width:100%;height:auto;}
+body{overflow-x:hidden;}
+.canvas{width:100%;max-width:960px;margin:0 auto;height:auto;min-height:100vh;}
+@media (max-width:768px){.container{padding:0 16px;}.canvas{padding:0 16px;}}
 """
 
 
@@ -148,6 +150,199 @@ def inject_bridge(html_text):
     if "</body>" in html_text:
         return html_text.replace("</body>", f"{BRIDGE_SCRIPT}\n</body>")
     return f"{html_text}\n{BRIDGE_SCRIPT}"
+
+
+def inject_responsive_layout(html_text):
+    updated = html_text
+    viewport_tag = (
+        '<meta name="viewport" content="width=device-width, initial-scale=1.0">'
+    )
+    if re.search(r'<meta name="viewport"[^>]*>', updated, flags=re.IGNORECASE):
+        updated = re.sub(
+            r'<meta name="viewport"[^>]*>',
+            viewport_tag,
+            updated,
+            flags=re.IGNORECASE,
+        )
+    elif "</head>" in updated:
+        updated = updated.replace("</head>", f"{viewport_tag}\n</head>")
+    else:
+        updated = f"{viewport_tag}\n{updated}"
+
+    if "responsive-layout" in updated:
+        return updated
+    style_tag = f'<style id="responsive-layout">{RESPONSIVE_CSS}</style>'
+    if "</head>" in updated:
+        return updated.replace("</head>", f"{style_tag}\n</head>")
+    return f"{style_tag}\n{updated}"
+
+
+def read_text_flexible(path):
+    try:
+        return path.read_text(encoding="utf-8")
+    except UnicodeDecodeError:
+        return path.read_text(encoding="cp949", errors="replace")
+
+
+def read_csv_rows(path):
+    if not path.exists():
+        return []
+    try:
+        text = path.read_text(encoding="utf-8-sig")
+    except UnicodeDecodeError:
+        text = path.read_text(encoding="cp949", errors="replace")
+    lines = [line for line in text.splitlines() if line.strip()]
+    if not lines:
+        return []
+    import csv
+
+    reader = csv.DictReader(lines)
+    rows = []
+    for row in reader:
+        normalized = {}
+        for key, value in row.items():
+            if key is None:
+                continue
+            clean_key = key.lstrip("\ufeff").strip()
+            normalized[clean_key] = value
+        rows.append(normalized)
+    return rows
+
+
+def build_catalog_data_from_csv():
+    best_by_product = {}
+    for path in CSV_PATHS:
+        for row in read_csv_rows(path):
+            product = str(row.get("product_name") or "").strip()
+            if not product:
+                continue
+            rule = str(row.get("rule_name") or "").strip().upper()
+            if rule != "S":
+                continue
+            term = parse_number(row.get("term_months"))
+            cycle = parse_number(row.get("check_cycle_months"))
+            fee = parse_number(row.get("rental_fee"))
+            if not term or not cycle or not fee:
+                continue
+            current = best_by_product.get(product)
+            candidate = (term, cycle, fee)
+            if not current:
+                best_by_product[product] = candidate
+                continue
+            current_term, current_cycle, current_fee = current
+            if term > current_term:
+                best_by_product[product] = candidate
+            elif term == current_term and cycle < current_cycle:
+                best_by_product[product] = candidate
+            elif term == current_term and cycle == current_cycle and fee < current_fee:
+                best_by_product[product] = candidate
+    if not best_by_product:
+        return None
+    items = []
+    for product in sorted(best_by_product.keys()):
+        _, _, fee = best_by_product[product]
+        items.append(
+            {
+                "model_name": product,
+                "model_code": "",
+                "price": fee,
+                "price_type": "",
+            }
+        )
+    return {"csv": items}
+
+
+def extract_catalog_data(html_text):
+    marker = "const data ="
+    marker_index = html_text.find(marker)
+    if marker_index == -1:
+        return None
+    start_index = html_text.find("{", marker_index)
+    if start_index == -1:
+        return None
+    depth = 0
+    for index in range(start_index, len(html_text)):
+        char = html_text[index]
+        if char == "{":
+            depth += 1
+        elif char == "}":
+            depth -= 1
+            if depth == 0:
+                return html_text[start_index : index + 1]
+    return None
+
+
+def parse_catalog_json(data_text):
+    try:
+        return json.loads(data_text)
+    except json.JSONDecodeError:
+        return None
+
+
+def inject_catalog_data(html_text):
+    if "window.catalogData =" in html_text or "window.catalogData=" in html_text:
+        return html_text
+    catalog_data = build_catalog_data_from_csv()
+    html_data = None
+    html_data_text = None
+    if CATALOG_PATH.exists():
+        source_text = read_text_flexible(CATALOG_PATH)
+        html_data_text = extract_catalog_data(source_text)
+        if html_data_text:
+            html_data = parse_catalog_json(html_data_text)
+    if catalog_data and html_data:
+        merged = dict(html_data)
+        merged["csv"] = catalog_data.get("csv", [])
+        data_text = json.dumps(merged, ensure_ascii=False)
+    elif catalog_data:
+        data_text = json.dumps(catalog_data, ensure_ascii=False)
+    elif html_data_text:
+        data_text = html_data_text
+    else:
+        return html_text
+    script = f"<script id=\"catalog-data\">window.catalogData = {data_text};</script>"
+    if "<body>" in html_text:
+        return html_text.replace("<body>", f"<body>\n{script}", 1)
+    if "</head>" in html_text:
+        return html_text.replace("</head>", f"{script}\n</head>", 1)
+    return f"{script}\n{html_text}"
+
+
+def inject_product_info(html_text):
+    if "product-info" in html_text:
+        return html_text
+    if not DEMO1_PATH.exists():
+        return html_text
+    product_html = read_text_flexible(DEMO1_PATH)
+    encoded = base64.b64encode(product_html.encode("utf-8")).decode("ascii")
+    script = (
+        "<script id=\"product-info\">"
+        "(function(){"
+        f"const raw=\"{encoded}\";"
+        "try{"
+        "const bytes=Uint8Array.from(atob(raw),c=>c.charCodeAt(0));"
+        "window.productInfoHtml=new TextDecoder('utf-8').decode(bytes);"
+        "}catch(e){window.productInfoHtml='';}"
+        "})();"
+        "</script>"
+    )
+    if "<body>" in html_text:
+        return html_text.replace("<body>", f"<body>\n{script}", 1)
+    if "</head>" in html_text:
+        return html_text.replace("</head>", f"{script}\n</head>", 1)
+    return f"{script}\n{html_text}"
+
+
+def inject_initial_view(html_text, initial_view):
+    if "initial-view" in html_text:
+        return html_text
+    view = (initial_view or "price").strip() or "price"
+    script = f"<script id=\"initial-view\">window.initialView=\"{view}\";</script>"
+    if "<body>" in html_text:
+        return html_text.replace("<body>", f"<body>\n{script}", 1)
+    if "</head>" in html_text:
+        return html_text.replace("</head>", f"{script}\n</head>", 1)
+    return f"{script}\n{html_text}"
 
 
 def sanitize_filename(text):
@@ -313,8 +508,10 @@ def convert_excel_to_pdf(xlsx_bytes):
         errors = []
         if platform.system().lower().startswith("win"):
             try:
+                import pythoncom  # type: ignore
                 import win32com.client  # type: ignore
 
+                pythoncom.CoInitialize()
                 excel = win32com.client.Dispatch("Excel.Application")
                 excel.Visible = False
                 excel.DisplayAlerts = False
@@ -325,6 +522,11 @@ def convert_excel_to_pdf(xlsx_bytes):
                 return pdf_path.read_bytes()
             except Exception as exc:
                 errors.append(f"Excel 변환 실패: {exc}")
+            finally:
+                try:
+                    pythoncom.CoUninitialize()
+                except Exception:
+                    pass
 
         soffice = shutil.which("soffice")
         if soffice:
@@ -404,7 +606,7 @@ def handle_event(event, save_dir):
     data = event.get("data") or {}
 
     recipient_raw = str(data.get("recipient") or "").strip()
-    recipient = f"{recipient_raw} 귀하" if recipient_raw else ""
+    recipient = recipient_raw
     ext = str(data.get("ext") or "").strip()
     email = str(data.get("email") or "").strip()
     quote_date = parse_date(data.get("quote_date"))
@@ -456,7 +658,10 @@ def handle_event(event, save_dir):
                 "message": "이메일 주소를 입력하세요.",
             }
         try:
-            subject = f"비교 견적서 ({recipient_raw or '수신자'})"
+            if recipient_raw:
+                subject = f"{recipient_raw} 귀하 비교견적서 검토 부탁드리겠습니다"
+            else:
+                subject = "비교견적서 검토 부탁드리겠습니다"
             body = "첨부된 PDF 견적서를 확인해 주세요."
             send_email(
                 to_email=email,
@@ -488,11 +693,27 @@ def handle_event(event, save_dir):
             "content": base64.b64encode(pdf_bytes).decode("ascii"),
         }
 
+    if action == "preview_pdf":
+        return {
+            "id": request_id,
+            "type": "preview",
+            "filename": f"{file_stem}.pdf",
+            "content": base64.b64encode(pdf_bytes).decode("ascii"),
+        }
+
     return {
         "id": request_id,
         "type": "message",
         "message": "알 수 없는 요청입니다.",
     }
+
+
+def safe_rerun():
+    if hasattr(st, "rerun"):
+        st.rerun()
+        return
+    if hasattr(st, "experimental_rerun"):
+        st.experimental_rerun()
 
 
 st.set_page_config(
@@ -544,6 +765,10 @@ if not COMPONENT_DIR.exists():
     st.stop()
 
 html = HTML_PATH.read_text(encoding="utf-8")
+html = inject_responsive_layout(html)
+html = inject_catalog_data(html)
+html = inject_product_info(html)
+html = inject_initial_view(html, st.session_state.get("active_view"))
 html = inject_bridge(html)
 html_hash = hashlib.sha256(html.encode("utf-8")).hexdigest()
 
@@ -559,8 +784,6 @@ payload = price_compare_component(
     html=html,
     html_hash=html_hash,
     response=response,
-    content_width=CONTENT_WIDTH,
-    content_height=CONTENT_HEIGHT,
     height=COMPONENT_HEIGHT,
 )
 
@@ -568,8 +791,12 @@ if payload and isinstance(payload, dict):
     request_id = payload.get("request_id")
     if request_id and request_id != last_request_id:
         st.session_state["last_request_id"] = request_id
-        st.session_state["bridge_response"] = handle_event(
+        view = (payload.get("data") or {}).get("view")
+        if view:
+            st.session_state["active_view"] = view
+        response = handle_event(
             payload,
             st.session_state["save_dir"],
         )
-        st.experimental_rerun()
+        st.session_state["bridge_response"] = response
+        safe_rerun()

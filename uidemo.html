@@ -216,6 +216,7 @@
       .row.data {
         border: var(--line-width) solid var(--line);
         background: #ffffff;
+        position: relative;
       }
 
       .cell {
@@ -256,31 +257,214 @@
         font-weight: 600;
       }
 
-      .canvas.catalog-open .summary,
-      .canvas.catalog-open .quote,
-      .canvas.catalog-open .plans {
-        display: none;
-      }
-
-      .catalog-view {
+      .model-suggestions {
         position: absolute;
-        top: 56px;
-        left: 0;
-        right: 0;
-        bottom: 0;
+        z-index: 30;
+        display: none;
+        flex-direction: column;
+        gap: 4px;
+        background: #ffffff;
+        border: var(--line-width) solid var(--line);
+        border-radius: 10px;
+        padding: 6px;
+        box-shadow: 0 12px 28px rgba(15, 23, 42, 0.12);
+        max-height: 240px;
+        overflow: auto;
+      }
+
+      .model-suggestion {
+        border: 0;
+        background: transparent;
+        text-align: left;
+        display: grid;
+        gap: 2px;
+        padding: 6px 8px;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 12px;
+        color: var(--ink);
+      }
+
+      .model-suggestion:hover {
+        background: #f5f7fb;
+      }
+
+      .model-suggestion .meta {
+        color: var(--muted);
+        font-weight: 600;
+      }
+
+      .resume-modal {
+        position: fixed;
+        inset: 0;
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 200;
+      }
+
+      .resume-modal.is-open {
+        display: flex;
+      }
+
+      .resume-modal__backdrop {
+        position: absolute;
+        inset: 0;
+        background: rgba(15, 23, 42, 0.35);
+        backdrop-filter: blur(2px);
+      }
+
+      .resume-modal__content {
+        position: relative;
+        z-index: 1;
+        width: min(92vw, 420px);
+        background: #ffffff;
+        border-radius: 16px;
+        border: var(--line-width) solid var(--line);
+        padding: 18px;
+        display: grid;
+        gap: 16px;
+        text-align: center;
+      }
+
+      .resume-modal__title {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--ink);
+        line-height: 1.5;
+      }
+
+      .resume-modal__actions {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .resume-btn {
+        height: 38px;
+        border-radius: 10px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .resume-btn.primary {
+        background: linear-gradient(135deg, #ff7f7f, #ffb18a);
+        color: #ffffff;
+        border: none;
+      }
+
+      .price-view,
+      .product-view,
+      .quote-view,
+      .guide-view {
         display: none;
       }
 
-      .canvas.catalog-open .catalog-view {
+      .canvas.view-price .price-view,
+      .canvas.view-product .product-view,
+      .canvas.view-guide .guide-view {
         display: block;
       }
 
-      .catalog-frame {
+      .canvas.view-quote .quote-view {
+        display: grid;
+      }
+
+      .product-view {
+        position: relative;
+        min-height: 720px;
+      }
+
+      .product-frame {
         width: 100%;
         height: 100%;
         border: var(--line-width) solid var(--line);
         border-radius: 12px;
         background: #ffffff;
+      }
+
+      .guide-view {
+        position: relative;
+        height: 100vh;
+        min-height: 720px;
+      }
+
+      .canvas.view-guide {
+        padding: 0;
+        border: none;
+        background: transparent;
+        width: 100%;
+        max-width: none;
+        height: auto;
+        margin: 0;
+      }
+
+      .canvas.view-guide .product-frame {
+        height: 100%;
+        border: none;
+        border-radius: 0;
+      }
+
+      .quote-view {
+        border: var(--line-width) solid var(--line);
+        border-radius: 16px;
+        background: var(--card);
+        padding: 16px;
+        gap: 14px;
+      }
+
+      .quote-view__section {
+        display: grid;
+        gap: 6px;
+      }
+
+      .quote-view__title {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--muted);
+      }
+
+      .quote-view__actions {
+        display: flex;
+        gap: 8px;
+        justify-content: flex-end;
+      }
+
+      .quote-send {
+        height: 38px;
+        padding: 0 16px;
+        border-radius: 10px;
+        border: none;
+        background: linear-gradient(135deg, #ff7f7f, #ffb18a);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .quote-refresh {
+        height: 38px;
+        padding: 0 16px;
+        border-radius: 10px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        color: var(--ink);
+        font-weight: 700;
+        font-size: 14px;
+        cursor: pointer;
+      }
+
+      .guide-view {
+        border: none;
+        border-radius: 0;
+        background: transparent;
+        padding: 0;
+        font-size: 14px;
+        color: var(--muted);
       }
 
       .quote {
@@ -342,44 +526,43 @@
       <div class="menu">
         <button class="active" type="button" data-view="price">가격비교</button>
         <span class="divider"></span>
-        <button type="button" data-view="catalog">카탈로그 비교</button>
+        <button type="button" data-view="guide">절차안내</button>
         <span class="divider"></span>
-        <button type="button" disabled>접수 안내</button>
+        <button type="button" data-view="product">제품정보</button>
         <span class="divider"></span>
-        <button type="button" disabled>견적서 발송</button>
-        <span class="divider"></span>
-        <button type="button" disabled>부품 신청</button>
+        <button type="button" data-view="quote">견적서 발송</button>
       </div>
 
-      <div class="summary" id="summary">
-        <span id="summary-text">차이 0원</span>
-        <button class="summary-action" type="button" id="export-csv">CSV 저장</button>
-      </div>
+      <div class="price-view">
+        <div class="summary" id="summary">
+          <span id="summary-text">차이 0원</span>
+          <button class="summary-action" type="button" id="export-csv">CSV 저장</button>
+        </div>
 
-      <div class="quote">
-        <label class="quote-field">
-          <span class="quote-label">수신</span>
-          <span class="quote-input-group">
-            <input class="quote-input" id="quote-recipient" type="text" placeholder="예: 이홍기" />
-            <span class="quote-suffix">귀하</span>
-          </span>
-        </label>
-        <label class="quote-field">
-          <span class="quote-label">내선번호</span>
-          <input class="quote-input" id="quote-ext" type="text" inputmode="numeric" placeholder="예: 1234" />
-        </label>
-        <label class="quote-field">
-          <span class="quote-label">견적일</span>
-          <input class="quote-input" type="date" id="quote-date" />
-        </label>
-        <label class="quote-field">
-          <span class="quote-label">이메일 주소</span>
-          <input class="quote-input" id="quote-email" type="email" placeholder="name@example.com" />
-        </label>
-      </div>
+        <div class="quote">
+          <label class="quote-field">
+            <span class="quote-label">수신</span>
+            <span class="quote-input-group">
+              <input class="quote-input" id="quote-recipient" type="text" placeholder="예: 이홍기" />
+              <span class="quote-suffix">귀하</span>
+            </span>
+          </label>
+          <label class="quote-field">
+            <span class="quote-label">내선번호</span>
+            <input class="quote-input" id="quote-ext" type="text" inputmode="numeric" placeholder="예: 1234" />
+          </label>
+          <label class="quote-field">
+            <span class="quote-label">견적일</span>
+            <input class="quote-input" type="date" id="quote-date" />
+          </label>
+          <label class="quote-field">
+            <span class="quote-label">이메일 주소</span>
+            <input class="quote-input" id="quote-email" type="email" placeholder="name@example.com" />
+          </label>
+        </div>
 
-      <div class="plans">
-        <div class="plan" data-plan="1">
+        <div class="plans">
+          <div class="plan" data-plan="1">
           <div class="plan-head">
             <span class="plan-title">1안</span>
             <div class="total-box">
@@ -431,7 +614,7 @@
           </div>
         </div>
 
-        <div class="plan" data-plan="2">
+          <div class="plan" data-plan="2">
           <div class="plan-head">
             <span class="plan-title">2안</span>
             <div class="total-box">
@@ -481,16 +664,47 @@
               </div>
             </div>
           </div>
+          </div>
         </div>
       </div>
 
-      <div class="catalog-view">
+      <div class="guide-view">
         <iframe
-          class="catalog-frame"
-          id="catalog-frame"
-          title="카탈로그"
+          class="product-frame"
+          id="guide-frame"
+          title="절차안내"
           loading="lazy"
         ></iframe>
+      </div>
+
+      <div class="product-view">
+        <iframe
+          class="product-frame"
+          id="product-frame"
+          title="제품정보"
+          loading="lazy"
+        ></iframe>
+      </div>
+
+      <div class="quote-view">
+        <div class="quote-view__section">
+          <div class="quote-view__title">발송 정보</div>
+          <div id="quote-summary"></div>
+        </div>
+        <div class="quote-view__actions">
+          <button class="quote-send" type="button" id="quote-send">견적서 발송</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="resume-modal" id="resume-modal" aria-hidden="true">
+      <div class="resume-modal__backdrop"></div>
+      <div class="resume-modal__content" role="dialog" aria-modal="true">
+        <div class="resume-modal__title" id="resume-message"></div>
+        <div class="resume-modal__actions">
+          <button class="resume-btn primary" type="button" id="resume-yes">네</button>
+          <button class="resume-btn" type="button" id="resume-no">아니요</button>
+        </div>
       </div>
     </div>
 
@@ -504,6 +718,311 @@
 
       function formatWon(value) {
         return `${format.format(value)}원`;
+      }
+
+      function normalizeModel(value) {
+        return String(value || "")
+          .toLowerCase()
+          .replace(/[^a-z0-9가-힣]/g, "");
+      }
+
+      function buildCatalogEntries(source) {
+        const entries = [];
+        if (!source || typeof source !== "object") return entries;
+        Object.values(source).forEach((items) => {
+          if (!Array.isArray(items)) return;
+          items.forEach((item) => {
+            const modelCode = String(item.model_code || "").trim();
+            const modelName = String(item.model_name || "").trim();
+            const priceValue = parseNumber(item.price);
+            if (!priceValue) return;
+            if (!modelCode && !modelName) return;
+            entries.push({
+              modelCode,
+              modelName,
+              priceType: String(item.price_type || "").trim(),
+              price: priceValue,
+              codeKey: normalizeModel(modelCode),
+              nameKey: normalizeModel(modelName),
+            });
+          });
+        });
+        return entries;
+      }
+
+      const catalogEntries = buildCatalogEntries(window.catalogData || {});
+      const MAX_SUGGESTIONS = 20;
+
+      function findCatalogMatches(queryKey) {
+        if (!queryKey) return [];
+        const matches = [];
+        for (const entry of catalogEntries) {
+          if (
+            (entry.codeKey && entry.codeKey.includes(queryKey)) ||
+            (entry.nameKey && entry.nameKey.includes(queryKey))
+          ) {
+            matches.push(entry);
+            if (matches.length >= MAX_SUGGESTIONS) break;
+          }
+        }
+        return matches;
+      }
+
+      function ensureSuggestionBox(row) {
+        let box = row.querySelector(".model-suggestions");
+        if (!box) {
+          box = document.createElement("div");
+          box.className = "model-suggestions";
+          row.appendChild(box);
+        }
+        return box;
+      }
+
+      function hideSuggestions(row) {
+        const box = row.querySelector(".model-suggestions");
+        if (box) {
+          box.style.display = "none";
+          box.innerHTML = "";
+        }
+      }
+
+      function applyCatalogEntry(row, entry) {
+        const modelInput = row.querySelector(".model");
+        const priceInput = row.querySelector(".price");
+        if (!modelInput || !priceInput) return;
+        modelInput.value = entry.modelCode || entry.modelName;
+        priceInput.value = entry.price;
+        updateAll();
+        saveDraft();
+      }
+
+      function showSuggestions(row, input, entries) {
+        const box = ensureSuggestionBox(row);
+        const inputLeft = input.offsetLeft;
+        const inputTop = input.offsetTop + input.offsetHeight + 4;
+        box.style.left = `${inputLeft}px`;
+        box.style.top = `${inputTop}px`;
+        box.style.width = `${input.offsetWidth}px`;
+        box.innerHTML = entries
+          .map((entry, index) => {
+            const title = entry.modelCode || entry.modelName || "";
+            const priceLabel = formatWon(entry.price);
+            const typeLabel = entry.priceType ? `(${entry.priceType})` : "";
+            const nameLabel =
+              entry.modelName && entry.modelName !== entry.modelCode
+                ? entry.modelName
+                : "";
+            return `
+              <button
+                type="button"
+                class="model-suggestion"
+                data-index="${index}"
+                data-code="${title}"
+                data-name="${entry.modelName || ""}"
+                data-price="${entry.price}"
+              >
+                <span>${title} ${typeLabel}</span>
+                <span class="meta">${priceLabel}</span>
+                ${nameLabel ? `<span class="meta">${nameLabel}</span>` : ""}
+              </button>
+            `;
+          })
+          .join("");
+        box.dataset.count = entries.length;
+        box.style.display = "flex";
+        box._entries = entries;
+      }
+
+      function handleModelInput(input) {
+        if (!catalogEntries.length) return;
+        const row = input.closest(".row.data");
+        if (!row) return;
+        const queryKey = normalizeModel(input.value.trim());
+        if (queryKey.length < 2) {
+          hideSuggestions(row);
+          return;
+        }
+        const matches = findCatalogMatches(queryKey);
+        if (!matches.length) {
+          hideSuggestions(row);
+          return;
+        }
+        if (matches.length === 1) {
+          applyCatalogEntry(row, matches[0]);
+          hideSuggestions(row);
+          return;
+        }
+        showSuggestions(row, input, matches);
+      }
+
+      const DRAFT_STORAGE_KEY = "price_compare_draft_v1";
+      const MIN_DEFAULT_ROWS = 3;
+      let allowDraftSave = false;
+      let pendingDraft = null;
+      let resumePrompted = false;
+
+      function readDraft() {
+        try {
+          const raw = window.localStorage.getItem(DRAFT_STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function writeDraft(draft) {
+        window.localStorage.setItem(DRAFT_STORAGE_KEY, JSON.stringify(draft));
+      }
+
+      function clearDraft() {
+        window.localStorage.removeItem(DRAFT_STORAGE_KEY);
+      }
+
+      function draftHasContent(draft) {
+        if (!draft) return false;
+        if (draft.recipient || draft.ext || draft.quote_date || draft.email) {
+          return true;
+        }
+        if ((draft.plan1?.rows || []).length) return true;
+        if ((draft.plan2?.rows || []).length) return true;
+        return false;
+      }
+
+      function collectDraft() {
+        const recipient = document.getElementById("quote-recipient")?.value.trim() ?? "";
+        const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
+        const quoteDate = document.getElementById("quote-date")?.value ?? "";
+        const email = document.getElementById("quote-email")?.value.trim() ?? "";
+        const plan1El = document.querySelector('[data-plan="1"]');
+        const plan2El = document.querySelector('[data-plan="2"]');
+        const plan1 = collectPlanData(plan1El, "1안");
+        const plan2 = collectPlanData(plan2El, "2안");
+        return {
+          recipient,
+          ext,
+          quote_date: quoteDate,
+          email,
+          plan1,
+          plan2,
+          discount1: getDiscount(plan1El),
+          discount2: getDiscount(plan2El),
+        };
+      }
+
+      function saveDraft() {
+        if (!allowDraftSave) return;
+        const draft = collectDraft();
+        if (draftHasContent(draft)) {
+          writeDraft(draft);
+        } else {
+          clearDraft();
+        }
+      }
+
+      function resetPlan(plan) {
+        const table = plan.querySelector(".table");
+        if (!table) return;
+        table.querySelectorAll(".row.data").forEach((row) => row.remove());
+        for (let i = 0; i < MIN_DEFAULT_ROWS; i += 1) {
+          table.appendChild(createRow());
+        }
+        const firstRadio = plan.querySelector('.prepay input[type="radio"]');
+        if (firstRadio) {
+          firstRadio.checked = true;
+        }
+      }
+
+      function applyPlanData(plan, rows, discountValue) {
+        const table = plan.querySelector(".table");
+        if (!table) return;
+        table.querySelectorAll(".row.data").forEach((row) => row.remove());
+        const totalRows = Math.max(rows.length, MIN_DEFAULT_ROWS);
+        for (let i = 0; i < totalRows; i += 1) {
+          const row = createRow();
+          const data = rows[i];
+          if (data) {
+            row.querySelector(".model").value = data.model ?? "";
+            row.querySelector(".price").value = data.price ?? "";
+            row.querySelector(".qty").value = data.qty ?? "";
+          }
+          table.appendChild(row);
+        }
+        const radio = plan.querySelector(
+          `.prepay input[type="radio"][value="${discountValue}"]`
+        );
+        if (radio) {
+          radio.checked = true;
+        }
+      }
+
+      function applyDraft(draft) {
+        if (!draft) return;
+        const recipientInput = document.getElementById("quote-recipient");
+        const extInput = document.getElementById("quote-ext");
+        const dateInput = document.getElementById("quote-date");
+        const emailInput = document.getElementById("quote-email");
+        if (recipientInput) recipientInput.value = draft.recipient ?? "";
+        if (extInput) extInput.value = draft.ext ?? "";
+        if (dateInput) dateInput.value = draft.quote_date ?? "";
+        if (emailInput) emailInput.value = draft.email ?? "";
+        const plan1El = document.querySelector('[data-plan="1"]');
+        const plan2El = document.querySelector('[data-plan="2"]');
+        if (plan1El) {
+          applyPlanData(plan1El, draft.plan1?.rows || [], draft.discount1 ?? "0");
+        }
+        if (plan2El) {
+          applyPlanData(plan2El, draft.plan2?.rows || [], draft.discount2 ?? "0");
+        }
+        updateAll();
+      }
+
+      function clearForm() {
+        const recipientInput = document.getElementById("quote-recipient");
+        const extInput = document.getElementById("quote-ext");
+        const dateInput = document.getElementById("quote-date");
+        const emailInput = document.getElementById("quote-email");
+        if (recipientInput) recipientInput.value = "";
+        if (extInput) extInput.value = "";
+        if (dateInput) dateInput.value = "";
+        if (emailInput) emailInput.value = "";
+        const plan1El = document.querySelector('[data-plan="1"]');
+        const plan2El = document.querySelector('[data-plan="2"]');
+        if (plan1El) resetPlan(plan1El);
+        if (plan2El) resetPlan(plan2El);
+        updateAll();
+      }
+
+      function openResumeModal(draft) {
+        const modal = document.getElementById("resume-modal");
+        const message = document.getElementById("resume-message");
+        if (!modal || !message) return;
+        const recipientLabel = draft?.recipient ? `(${draft.recipient})` : "";
+        message.textContent = `이전 계약 안내 기록${recipientLabel}이 있습니다. 이어서 안내할까요?`;
+        modal.classList.add("is-open");
+        modal.setAttribute("aria-hidden", "false");
+      }
+
+      function closeResumeModal() {
+        const modal = document.getElementById("resume-modal");
+        if (!modal) return;
+        modal.classList.remove("is-open");
+        modal.setAttribute("aria-hidden", "true");
+      }
+
+      function maybePromptResume() {
+        if (resumePrompted) return;
+        const draft = readDraft();
+        if (!draftHasContent(draft)) {
+          allowDraftSave = true;
+          resumePrompted = true;
+          return;
+        }
+        pendingDraft = draft;
+        resumePrompted = true;
+        openResumeModal(draft);
+        if (draft) {
+          applyDraft(draft);
+        }
       }
 
       function getDiscount(plan) {
@@ -542,6 +1061,38 @@
           return;
         }
         summary.textContent = "차이 0원";
+      }
+
+      function buildQuoteSummaryHtml() {
+        const recipient = document.getElementById("quote-recipient")?.value.trim() ?? "";
+        const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
+        const quoteDate = document.getElementById("quote-date")?.value ?? "";
+        const email = document.getElementById("quote-email")?.value.trim() ?? "";
+        const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "1안");
+        const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "2안");
+        return `
+          <div>수신: ${recipient || "-"}</div>
+          <div>내선번호: ${ext || "-"}</div>
+          <div>견적일: ${quoteDate || "-"}</div>
+          <div>이메일: ${email || "-"}</div>
+          <div>1안 총액: ${formatWon(plan1.total || 0)}</div>
+          <div>2안 총액: ${formatWon(plan2.total || 0)}</div>
+        `;
+      }
+
+      function refreshQuoteSummary() {
+        const container = document.getElementById("quote-summary");
+        if (!container) return;
+        container.innerHTML = buildQuoteSummaryHtml();
+      }
+
+      function sendQuoteEmail() {
+        if (!window.PriceCompareBridge || !window.PriceCompareBridge.buildPayload) return;
+        updateAll();
+        refreshQuoteSummary();
+        const payload = window.PriceCompareBridge.buildPayload("send_email");
+        payload.data.view = "quote";
+        window.parent.postMessage({ source: "price-compare", payload }, "*");
       }
 
       function collectPlanData(plan, label) {
@@ -698,15 +1249,27 @@
 
       function setView(view) {
         const canvas = document.querySelector(".canvas");
-        const frame = document.getElementById("catalog-frame");
+        const productFrame = document.getElementById("product-frame");
+        const guideFrame = document.getElementById("guide-frame");
         const menuButtons = document.querySelectorAll(".menu button[data-view]");
-        if (view === "catalog") {
-          if (!frame.src) {
-            frame.src = "https://www.chungho.co.kr/newch/prod_list?menu=2&cate=all";
+        canvas.classList.remove("view-price", "view-guide", "view-product", "view-quote");
+        canvas.classList.add(`view-${view}`);
+        if (view === "guide" && guideFrame && window.productInfoHtml) {
+          if (!guideFrame.srcdoc) {
+            guideFrame.srcdoc = window.productInfoHtml;
           }
-          canvas.classList.add("catalog-open");
-        } else {
-          canvas.classList.remove("catalog-open");
+        }
+        if (view === "product" && productFrame) {
+          if (!productFrame.src) {
+            productFrame.src =
+              "https://www.chungho.co.kr/newch/prod_list?menu=2&cate=all";
+          }
+        }
+        if (view === "quote") {
+          refreshQuoteSummary();
+        }
+        if (view === "price") {
+          maybePromptResume();
         }
         menuButtons.forEach((btn) => {
           btn.classList.toggle("active", btn.dataset.view === view);
@@ -724,8 +1287,48 @@
         exportBtn.addEventListener("click", downloadCsv);
       }
 
+      const quoteSend = document.getElementById("quote-send");
+      if (quoteSend) {
+        quoteSend.addEventListener("click", sendQuoteEmail);
+      }
+
+      window.addEventListener("message", (event) => {
+        if (!event.data || event.data.source !== "price-compare-response") return;
+        const payload = event.data.payload || {};
+        if (payload.type !== "message" || !payload.message) return;
+        alert(payload.message);
+      });
+
+      const resumeYes = document.getElementById("resume-yes");
+      const resumeNo = document.getElementById("resume-no");
+      if (resumeYes) {
+        resumeYes.addEventListener("click", () => {
+          if (pendingDraft) {
+            applyDraft(pendingDraft);
+          }
+          pendingDraft = null;
+          allowDraftSave = true;
+          closeResumeModal();
+        });
+      }
+      if (resumeNo) {
+        resumeNo.addEventListener("click", () => {
+          pendingDraft = null;
+          allowDraftSave = true;
+          closeResumeModal();
+        });
+      }
+
+      document.querySelectorAll(".quote-input").forEach((input) => {
+        input.addEventListener("input", saveDraft);
+        input.addEventListener("change", saveDraft);
+      });
+
       document.querySelectorAll(".plan").forEach((plan) => {
-        plan.addEventListener("input", updateAll);
+        plan.addEventListener("input", () => {
+          updateAll();
+          saveDraft();
+        });
         plan.addEventListener("click", (event) => {
           const deleteBtn = event.target.closest(".row-delete");
           if (!deleteBtn) return;
@@ -733,19 +1336,63 @@
           if (!row) return;
           row.remove();
           updateAll();
+          saveDraft();
         });
         plan.querySelectorAll('.prepay input[type="radio"]').forEach((input) => {
-          input.addEventListener("change", updateAll);
+          input.addEventListener("change", () => {
+            updateAll();
+            saveDraft();
+          });
         });
         plan.querySelector("[data-add]").addEventListener("click", () => {
           plan.querySelector(".table").appendChild(createRow());
           updateAll();
+          saveDraft();
+        });
+      });
+
+      document.addEventListener("input", (event) => {
+        if (!(event.target instanceof HTMLElement)) return;
+        if (!event.target.classList.contains("model")) return;
+        handleModelInput(event.target);
+      });
+
+      document.addEventListener("focusin", (event) => {
+        if (!(event.target instanceof HTMLElement)) return;
+        if (!event.target.classList.contains("model")) return;
+        handleModelInput(event.target);
+      });
+
+      document.addEventListener("mousedown", (event) => {
+        const button = event.target.closest(".model-suggestion");
+        if (!button) return;
+        event.preventDefault();
+        const row = button.closest(".row.data");
+        const box = button.closest(".model-suggestions");
+        if (!row || !box || !box._entries) return;
+        const index = Number(button.dataset.index);
+        const entry = box._entries[index];
+        if (entry) {
+          applyCatalogEntry(row, entry);
+        }
+        hideSuggestions(row);
+      });
+
+      document.addEventListener("click", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.closest(".model-suggestions")) return;
+        if (target.classList.contains("model")) return;
+        document.querySelectorAll(".model-suggestions").forEach((box) => {
+          box.style.display = "none";
         });
       });
 
       setDefaultQuoteDate();
-      setView("price");
+      const savedView = window.initialView || "price";
+      setView(savedView);
       updateAll();
+      maybePromptResume();
     </script>
   </body>
 </html>
