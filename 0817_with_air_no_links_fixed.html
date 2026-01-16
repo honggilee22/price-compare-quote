@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Water Care Search</title>
+    <style>
+      :root {
+        --bg: #f6f7fb;
+        --card: #ffffff;
+        --ink: #121212;
+        --muted: #6a6f76;
+        --accent: #0a7bff;
+        --border: #e1e5ec;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        margin: 0;
+        font-family: "Noto Sans KR", "Apple SD Gothic Neo", "Segoe UI", sans-serif;
+        background: var(--bg);
+        color: var(--ink);
+      }
+
+      .wrap {
+        max-width: 980px;
+        margin: 0 auto;
+        padding: 16px;
+      }
+
+      .search {
+        display: grid;
+        grid-template-columns: 1fr auto auto auto auto;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 14px;
+      }
+
+      .search input {
+        height: 44px;
+        padding: 0 12px;
+        border: 1px solid var(--border);
+        border-radius: 10px;
+        font-size: 16px;
+        background: #fff;
+      }
+
+      .search button {
+        height: 44px;
+        padding: 0 16px;
+        border: 0;
+        border-radius: 10px;
+        background: var(--accent);
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+      }
+
+      .search button.secondary {
+        background: #1f2328;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 10px;
+      }
+
+      .card {
+        background: var(--card);
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--border);
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+
+      a.thumb-link { display: block; text-decoration: none; }
+
+      .thumb {
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        object-fit: cover;
+        background: #e9edf3;
+        display: block;
+      }
+
+      .meta {
+        padding: 10px;
+        display: grid;
+        gap: 6px;
+      }
+
+      .name {
+        font-size: 13px;
+        line-height: 1.4;
+        color: var(--muted);
+      }
+
+      .prices {
+        display: grid;
+        gap: 4px;
+      }
+
+      .price-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 8px;
+        padding: 4px 6px;
+        border-radius: 8px;
+      }
+
+      .price-row.is-selectable {
+        cursor: pointer;
+      }
+
+      .price-row.selected {
+        background: #eef3ff;
+        outline: 1px solid #cbd7ff;
+      }
+
+      .price-row input {
+        margin: 0;
+      }
+
+      .price-type {
+        font-size: 12px;
+        font-weight: 600;
+        color: var(--muted);
+      }
+
+      .badge {
+        display: inline-block;
+        font-weight: 700;
+        font-size: 13px;
+        color: #fff;
+        background: #111;
+        border-radius: 8px;
+        padding: 2px 8px;
+        width: fit-content;
+      }
+
+      .price {
+        font-size: 15px;
+        font-weight: 700;
+      }
+
+      .empty {
+        padding: 24px 12px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 14px;
+      }
+    
+      @media (max-width: 720px) {
+        .search {
+          grid-template-columns: 1fr 1fr;
+        }
+
+        .search input {
+          grid-column: 1 / -1;
+        }
+      }
+</style>
+  </head>
+  <body>
+    <div class="wrap">
+      <div class="search">
+        <input id="q" type="text" placeholder="모델명 검색 (예: 5710, ap-1516d)">
+        <button id="btn">검색</button>
+
+        <button id="reset" class="secondary">초기화</button>
+        <button id="water" class="secondary">정수기</button>
+        <button id="air" class="secondary">공기청정기</button>
+        <button id="bidet" class="secondary">비데</button>
+      </div>
+      <div id="grid" class="grid"></div>
+      <div id="empty" class="empty" style="display: none">검색 결과가 없습니다.</div>
+    </div>
+
+    <script>
+      const data = {"water": [{"model_name": "코웨이 아이콘 얼음정수기 맥스 CHPI-7420N", "model_code": "CHPO-7420N", "price": "48900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250822/13c5eeab847f2.jpg"}, {"model_name": "코웨이 아이콘 얼음냉온정수기 미니 CHPI-7430N", "model_code": "CHPI-7430N", "price": "42900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250727/09f4284d09850.jpg"}, {"model_name": "코웨이 아이콘 얼음냉온정수기 스탠다드 CHPI-7410N", "model_code": "CHPI-7410N", "price": "45900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250727/58f494db00cf6.jpg"}, {"model_name": "코웨이 아이콘 얼음냉정수기 스탠다드 CPI-7410N", "model_code": "CPI-7410N", "price": "41900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250727/e02345a4716e4.jpg"}, {"model_name": "코웨이 엘리트 빌트인 정수기 CHP-1111N /CHP-1112N", "model_code": "CHP-1111N", "price": "30900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250618/2d27dc1278f0f.jpg"}, {"model_name": "코웨이 엘리트 빌트인 정수기 CHP-1111N /CHP-1112N", "model_code": "CHP-1111N", "price": "33900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250618/2d27dc1278f0f.jpg"}, {"model_name": "코웨이 아이콘 프로 냉온정수기 CHP-7212N", "model_code": "CHP-7212N", "price": "28900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250618/ba4660770f72d.jpg"}, {"model_name": "코웨이 아이콘 프로 냉온정수기 CHP-7212N", "model_code": "CHP-7212N", "price": "32900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250618/ba4660770f72d.jpg"}, {"model_name": "코웨이 스위치 정수전용정수기 P-2200N", "model_code": "", "price": "15900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250509/5751496240dcc.jpg"}, {"model_name": "코웨이 스위치 정수전용정수기 P-2200N", "model_code": "", "price": "17900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250509/5751496240dcc.jpg"}, {"model_name": "코웨이 얼음냉온정수기 RO CHPI-7521L", "model_code": "CHPI-7521L", "price": "40400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250509/043cb130007ef.jpg"}, {"model_name": "코웨이 아이콘 얼음냉온정수기 오리지널 CHPI-7400N_V2", "model_code": "CHPI-7400N", "price": "45400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/c6a71c53afad7.jpg"}, {"model_name": "코웨이 아이콘 얼음냉정수기 오리지널 CPI-7400N_V2", "model_code": "CPI-7400N", "price": "41400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/3f4f23561140e.jpg"}, {"model_name": "코웨이 아이콘2 냉온정수기 CHP-7211N", "model_code": "CHP-7211N", "price": "28400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/ff23198e07874.jpg"}, {"model_name": "코웨이 아이콘2 냉온정수기 CHP-7211N", "model_code": "CHP-7211N", "price": "32400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/ff23198e07874.jpg"}, {"model_name": "코웨이 아이콘2 냉정수기 CP-7211N", "model_code": "CP-7211N", "price": "26400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/d53953f2542fe.jpg"}, {"model_name": "코웨이 아이콘2 냉정수기 CP-7211N", "model_code": "CP-7211N", "price": "30400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/d53953f2542fe.jpg"}, {"model_name": "코웨이 엘리트 냉온정수기 CHP-6340L", "model_code": "CHP-6340L", "price": "30900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/79058b8bf267f.jpg"}, {"model_name": "코웨이 엘리트 냉정수기 CP-6340L", "model_code": "CP-6340L", "price": "28900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/0855c2e7518e2.jpg"}, {"model_name": "코웨이 미니 나노직수 정수기 P-350N", "model_code": "", "price": "15900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/77b8c83b71c70.jpg"}, {"model_name": "코웨이 미니 나노직수 정수기 P-350N", "model_code": "", "price": "16900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/77b8c83b71c70.jpg"}, {"model_name": "코웨이 아이스 스탠드 자이언트 얼음냉온정수기 CHPI-5830L", "model_code": "CHPI-5830L", "price": "58900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20251213/4c70a3f5f66ad.jpg"}, {"model_name": "코웨이 워터스탠드 플러스 냉온정수기 CHP-5730N", "model_code": "CHP-5730N", "price": "27900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20251125/7a40a87304ea3.jpg"}, {"model_name": "코웨이 워터스탠드 플러스 냉온정수기 CHP-5730(L/R)", "model_code": "CHP-5730", "price": "25900원", "price_type": "일반형", "image_url": "https://cdn.imweb.me/thumbnail/20250929/89be1d87f8ed7.jpg"}, {"model_name": "코웨이 워터스탠드 플러스 냉온정수기 CHP-5730(L/R)", "model_code": "CHP-5730", "price": "27900원", "price_type": "펌프형", "image_url": "https://cdn.imweb.me/thumbnail/20250929/89be1d87f8ed7.jpg"}, {"model_name": "코웨이 워터 스탠드2 냉온정수기 CHP-5711(L/R)", "model_code": "CHP-5711", "price": "25900원", "price_type": "일반형", "image_url": "https://cdn.imweb.me/thumbnail/20250121/5afbf5957d5df.jpg"}, {"model_name": "코웨이 워터 스탠드2 냉온정수기 CHP-5711(L/R)", "model_code": "CHP-5711", "price": "27900원", "price_type": "펌프형", "image_url": "https://cdn.imweb.me/thumbnail/20250121/5afbf5957d5df.jpg"}, {"model_name": "코웨이 프라임 스탠드 냉온정수기 CHP-5720L", "model_code": "CHP-5720L", "price": "44900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/6d92a470bed8c.jpg"}, {"model_name": "코웨이 프라임 아이스 맥스 스탠드 얼음냉온정수기 CHPI-5810L", "model_code": "CHPI-5810L", "price": "55900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/4d18ae6c32e6d.jpg"}, {"model_name": "코웨이 아이콘 스탠드 냉온정수기 CHP-5610N", "model_code": "CHP-5610N", "price": "25900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/3e3a0fa0af82d.jpg"}, {"model_name": "코웨이 아이콘 스탠드 냉온정수기 CHP-5610N", "model_code": "CHP-5610N", "price": "27900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/3e3a0fa0af82d.jpg"}, {"model_name": "코웨이 아이스 스탠드 슬림 얼음냉온정수기 CHPI-620L", "model_code": "CHPI-620L", "price": "48900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/46c578cae41fe.jpg"}, {"model_name": "코웨이 아이스 스탠드 냉온얼음정수기 일반형 CHPI-5801L", "model_code": "CHPI-5801L", "price": "55900원", "price_type": "색상", "image_url": "https://cdn.imweb.me/thumbnail/20230821/481abd3348412.jpg"}, {"model_name": "코웨이 아이스 스탠드 냉온얼음정수기 일반형 CHPI-5801L", "model_code": "CHPI-5801L", "price": "56900원", "price_type": "색상", "image_url": "https://cdn.imweb.me/thumbnail/20230821/481abd3348412.jpg"}, {"model_name": "코웨이 아이스 스탠드 냉온얼음정수기 스스로 살균 CHPI-5800L", "model_code": "CHPI-5800L", "price": "59400원", "price_type": "색상", "image_url": "https://cdn.imweb.me/thumbnail/20230821/a2f8fd94ee5b2.jpg"}, {"model_name": "코웨이 노블 빌트인 직수 냉온정수기 CHP-3140N", "model_code": "CHP-3140N", "price": "36400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/8d1b0cb8377ef.jpg"}, {"model_name": "코웨이 노블 빌트인 직수 냉온정수기 CHP-3140N", "model_code": "CHP-3140N", "price": "39400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/8d1b0cb8377ef.jpg"}, {"model_name": "코웨이 노블 냉온정수기 세로 CHP-8200N", "model_code": "CHP-8200N", "price": "33400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/5584da072f3b2.jpg"}, {"model_name": "코웨이 노블 냉온정수기 세로 CHP-8200N", "model_code": "CHP-8200N", "price": "36400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/5584da072f3b2.jpg"}, {"model_name": "코웨이 노블 냉온정수기 가로 CHP-8210N", "model_code": "CHP-8210N", "price": "33400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/49adb9c402283.jpg"}, {"model_name": "코웨이 노블 냉온정수기 가로 CHP-8210N", "model_code": "CHP-8210N", "price": "36400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/49adb9c402283.jpg"}, {"model_name": "코웨이 노블 냉온정수기 RO CHP-8310L", "model_code": "CHP-8310L", "price": "33400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230824/4afc78728bb93.jpg"}, {"model_name": "코웨이 노블 냉온정수기 RO CHP-8310L", "model_code": "CHP-8310L", "price": "36400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230824/4afc78728bb93.jpg"}, {"model_name": "코웨이 프라임 2.0 냉정수기 CP-6310L", "model_code": "CP-6310L", "price": "28900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/903447cac1f3a.jpg"}, {"model_name": "코웨이 아이스 3.0 얼음 냉온정수기 IoCare CHPI-7511L", "model_code": "CHPI-7511L", "price": "42400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230821/b1a908c22199d.jpg"}, {"model_name": "코웨이 아이스 3.0 얼음 냉정수기 IoCare CPI-7511L", "model_code": "CPI-7511L", "price": "38400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/7905baee61e0a.jpg"}, {"model_name": "코웨이 아이스 3.0 얼음 스파클링 냉정수기 CPSI-8510L", "model_code": "CPSI-8510L", "price": "48900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/0fa832db6814d.jpg"}, {"model_name": "코웨이 프라임 정수전용 정수기 베이직 P-6320L", "model_code": "", "price": "20900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/d96a4aef4aca9.png"}, {"model_name": "코웨이 프라임 1.0 냉온정수기 CHP-264L", "model_code": "CHP-264L", "price": "28900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/8041456557a7a.jpg"}, {"model_name": "코웨이 스탠드 냉온정수기 CHP-700L", "model_code": "CHP-700L", "price": "60100원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/e1c9e9c19c946.jpg"}, {"model_name": "코웨이 빌트인 정수 전용 정수기 P-150N", "model_code": "", "price": "19800원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/dc9341ad66b7e.jpg"}, {"model_name": "코웨이 시루직수 워터 스탠드 CHP-5700R", "model_code": "CHP-5700R", "price": "51900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230822/c00f2ea55f27f.jpg"}, {"model_name": "", "model_code": "CHP-5710L", "price": "31900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "CHP-590L", "price": "30900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "CHP-590N", "price": "32900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "CHP-590R", "price": "34900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "CHP-671L", "price": "43600", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "CHPI-5801LW", "price": "56900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "CHPI-6500L", "price": "47500", "price_type": "", "image_url": "", "source": "excel"}], "air": [{"model_name": "코웨이 히티브 온풍공기청정기 APH-0525F", "model_code": "APH-0525F", "price": "24400원", "price_type": "자가관리", "image_url": "https://cdn.imweb.me/thumbnail/20251117/076c7e8f893d0.png"}, {"model_name": "코웨이 히티브 온풍공기청정기 APH-0525F", "model_code": "APH-0525F", "price": "27400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20251117/076c7e8f893d0.png"}, {"model_name": "코웨이 노블 공기청정기2 16평형 (53㎡) AP-1623M", "model_code": "AP-1623M", "price": "30900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230920/653796d6b4c1d.png"}, {"model_name": "코웨이 노블 공기청정기2 16평형 (53㎡) AP-1623M", "model_code": "AP-1623M", "price": "33900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230920/653796d6b4c1d.png"}, {"model_name": "코웨이 노블 공기청정기2 20평형 (67㎡) AP-2023K", "model_code": "AP-2023K", "price": "33900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230920/653796d6b4c1d.png"}, {"model_name": "코웨이 노블 공기청정기2 20평형 (67㎡) AP-2023K", "model_code": "AP-2023K", "price": "35900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230920/653796d6b4c1d.png"}, {"model_name": "코웨이 노블 공기청정기2 30평형 (100㎡) AP-3024H", "model_code": "AP-3024H", "price": "47900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250227/b53db1a4ca59f.png"}, {"model_name": "코웨이 노블 공기청정기2 30평형 (100㎡) AP-3024H", "model_code": "AP-3024H", "price": "50900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250227/b53db1a4ca59f.png"}, {"model_name": "코웨이 노블 공기청정기2 40평형 (133㎡) AP-4025D", "model_code": "AP-4025D", "price": "51900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250227/299429f746311.png"}, {"model_name": "코웨이 노블 공기청정기2 40평형 (133㎡) AP-4025D", "model_code": "AP-4025D", "price": "54900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250227/299429f746311.png"}, {"model_name": "코웨이 노블 공기청정기 30평형 (100㎡) AP-3021D", "model_code": "AP-3021D", "price": "47900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20220303/8cb22a5959a90.png"}, {"model_name": "코웨이 노블 공기청정기 30평형 (100㎡) AP-3021D", "model_code": "AP-3021D", "price": "50900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20220303/8cb22a5959a90.png"}, {"model_name": "코웨이 스퀘어핏 공기청정기 (38㎡) AP-1125G", "model_code": "AP-1125G", "price": "16400원", "price_type": "자가관리", "image_url": "https://cdn.imweb.me/thumbnail/20250814/a877f05595764.png"}, {"model_name": "코웨이 스퀘어핏 공기청정기 (38㎡) AP-1125G", "model_code": "AP-1125G", "price": "18400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250814/a877f05595764.png"}, {"model_name": "코웨이 스퀘어핏 공기청정기 (82㎡) AP-2425H", "model_code": "AP-2425H", "price": "25400원", "price_type": "자가관리", "image_url": "https://cdn.imweb.me/thumbnail/20250814/511d04fc4ac04.png"}, {"model_name": "코웨이 스퀘어핏 공기청정기 (82㎡) AP-2425H", "model_code": "AP-2425H", "price": "27400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250814/511d04fc4ac04.png"}, {"model_name": "코웨이 파워업 35평형 공기청정기 AP-3522F", "model_code": "AP-3522F", "price": "45900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20240404/1784d429e4e71.png"}, {"model_name": "코웨이 벽걸이 공기청정기2 AP-1225F", "model_code": "AP-1225F", "price": "27900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250930/efa23543354ad.png"}, {"model_name": "코웨이 인버터 제습기 23L AD-2325C", "model_code": "AD-2325C", "price": "17900", "price_type": "", "image_url": "https://cdn.imweb.me/thumbnail/20250616/f323f0f31a438.png"}, {"model_name": "코웨이 노블 제습기 12L AD-1221E", "model_code": "AD-1221E", "price": "14900", "price_type": "", "image_url": "https://cdn.imweb.me/thumbnail/20250516/faf682aa788ff.png"}, {"model_name": "코웨이 파워업 공기청정기 2 AP-3525I", "model_code": "AP-3525I", "price": "45900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250501/27cff72437d2f.png"}, {"model_name": "코웨이 싱글파워 공기청정기 10평형 AP-1023F", "model_code": "AP-1023F", "price": "18400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230327/703b83b740b6e.jpg"}, {"model_name": "코웨이 싱글파워 공기청정기 10평형 AP-1023F", "model_code": "AP-1023F", "price": "21900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230327/703b83b740b6e.jpg"}, {"model_name": "코웨이 멀티액션2 공기청정기 15평형 AP-1523D", "model_code": "AP-1523D", "price": "27900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230915/047eb0d430bbe.png"}, {"model_name": "코웨이 멀티액션2 공기청정기 15평형 AP-1523D", "model_code": "AP-1523D", "price": "30900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230915/047eb0d430bbe.png"}, {"model_name": "코웨이 듀얼클린 제습공기청정기 12.5L APD-1023A", "model_code": "APD-1023A", "price": "33900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230524/a55e39dc8751c.png"}, {"model_name": "코웨이 듀얼클린 제습공기청정기 12.5L APD-1023A", "model_code": "APD-1023A", "price": "35900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230524/a55e39dc8751c.png"}, {"model_name": "코웨이 노블 제습공기청정기 APD-1025E", "model_code": "APD-1025E", "price": "37900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20230920/416777ba9f36f.png"}, {"model_name": "코웨이 노블 제습공기청정기 APD-1025E", "model_code": "APD-1025E", "price": "40900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230920/416777ba9f36f.png"}, {"model_name": "코웨이 듀얼클린 가습공기청정기 12평형 APMS-1020A", "model_code": "APMS-1020A", "price": "26400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20220304/e40780b3851a9.png"}, {"model_name": "코웨이 듀얼클린 가습공기청정기 12평형 APMS-1020A", "model_code": "APMS-1020A", "price": "33400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20220304/e40780b3851a9.png"}, {"model_name": "코웨이 벽걸이 공기청정기 34평형 AP-3519A", "model_code": "AP-3519A", "price": "51900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20220413/ddc55127e3f70.png"}, {"model_name": "코웨이 콰트로파워 공기청정기 30평형 AP-3018B", "model_code": "AP-3018B", "price": "51900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20220413/adab1d707670c.png"}, {"model_name": "코웨이 사계절 의류청정기 더블케어 FAD-01S", "model_code": "", "price": "42900", "price_type": "", "image_url": "https://cdn.imweb.me/thumbnail/20220303/29f8e13b5facd.png"}, {"model_name": "코웨이 사계절 의류청정기 더블케어 FAD-02S", "model_code": "", "price": "40900", "price_type": "", "image_url": "https://cdn.imweb.me/thumbnail/20220303/935395a470f2a.png"}, {"model_name": "", "model_code": "AP-1018F", "price": "24900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "AP-1019D", "price": "30900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "AP-1516D", "price": "34900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "AP-2318D", "price": "39900", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "APM-1514A", "price": "21000", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "APMS-1014D", "price": "30400", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "APMS-1516F", "price": "35900", "price_type": "", "image_url": "", "source": "excel"}], "bidet": [{"model_name": "코웨이 슬리믹 비데 BAS49-A", "model_code": "BAS49-A", "price": "21900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20251114/0e61f598ce336.png"}, {"model_name": "코웨이 슬리믹 비데 BAS49-A", "model_code": "BAS49-A", "price": "23900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20251114/0e61f598ce336.png"}, {"model_name": "코웨이 스스로케어 도기맞춤형 비데 리모트 2 BAS47", "model_code": "BAS47", "price": "20400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250501/596b9c18d11a7.png"}, {"model_name": "코웨이 스스로케어 도기맞춤형 비데 리모트 2 BAS47", "model_code": "BAS47", "price": "22400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250501/596b9c18d11a7.png"}, {"model_name": "코웨이 프라임 비데 BA36-B", "model_code": "", "price": "20400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20231228/d5302c37b7214.png"}, {"model_name": "코웨이 더블케어 비데 2 BAS37-C", "model_code": "BAS37-C", "price": "24400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250107/8a3203a6ac5b9.png"}, {"model_name": "코웨이 더블케어 비데 2 BAS37-C", "model_code": "BAS37-C", "price": "26400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250107/8a3203a6ac5b9.png"}, {"model_name": "코웨이 더블케어 플러스 비데 2 BAS38-C", "model_code": "BAS38-C", "price": "25400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20250107/224eb9058c641.png"}, {"model_name": "코웨이 더블케어 플러스 비데 2 BAS38-C", "model_code": "BAS38-C", "price": "27400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20250107/224eb9058c641.png"}, {"model_name": "코웨이 스스로케어 비데 일반형 BAS40-A", "model_code": "BAS40-A", "price": "18400원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20231011/de27e86eb9eb1.png"}, {"model_name": "코웨이 스스로케어 비데 일반형 BAS40-A", "model_code": "BAS40-A", "price": "22400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20231011/de27e86eb9eb1.png"}, {"model_name": "코웨이 스타일케어 비데 BAS41-A", "model_code": "BAS41-A", "price": "19900원", "price_type": "셀프관리", "image_url": "https://cdn.imweb.me/thumbnail/20231117/d60748b8317be.png"}, {"model_name": "코웨이 스타일케어 비데 BAS41-A", "model_code": "BAS41-A", "price": "21900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20231117/d60748b8317be.png"}, {"model_name": "코웨이 스스로케어 비데 리모트 BAS25-B", "model_code": "BAS25-B", "price": "24400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20231228/2fae360054bbd.png"}, {"model_name": "코웨이 스스로케어 비데 저수압 특화 BAS39-A", "model_code": "BAS39-A", "price": "23400원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230609/5849323ce0f0b.png"}, {"model_name": "코웨이 프라임 비데(건조기능 미포함) BA20-D", "model_code": "", "price": "16900원", "price_type": "방문관리", "image_url": "https://cdn.imweb.me/thumbnail/20230612/0460013da5e8b.png"}, {"model_name": "", "model_code": "BA20-B", "price": "21400", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "BA36-A", "price": "18720", "price_type": "", "image_url": "", "source": "excel"}, {"model_name": "", "model_code": "BAS29-C", "price": "20120", "price_type": "", "image_url": "", "source": "excel"}]};
+
+    const grid = document.getElementById("grid");
+    const empty = document.getElementById("empty");
+    const input = document.getElementById("q");
+    const btn = document.getElementById("btn");
+    const waterBtn = document.getElementById("water");
+    const airBtn = document.getElementById("air");
+    const bidetBtn = document.getElementById("bidet");
+    const resetBtn = document.getElementById("reset");
+
+    let category = "water";
+
+    function normalize(value) {
+      return String(value || "").toLowerCase().replace(/[^a-z0-9]/g, "");
+    }
+
+    function formatPrice(value) {
+      const num = Number(String(value || "").replace(/[^0-9]/g, ""));
+      if (!num) return "";
+      return num.toLocaleString("ko-KR") + "원";
+    }
+
+    function normalizePrice(value) {
+      return String(value || "").replace(/[^0-9]/g, "");
+    }
+
+    function tokenizeQuery(value) {
+      return String(value || "")
+        .split(/[\s,]+/)
+        .map((token) => normalize(token))
+        .filter(Boolean);
+    }
+
+    function isPriceToken(token) {
+      return /^[0-9]{5,}$/.test(token);
+    }
+
+    function matchesTokens(item, tokens) {
+      const modelFields = [
+        normalize(item.model_code),
+        normalize(item.model_name),
+      ].filter(Boolean);
+      const priceFields = (item.prices || [])
+        .map((p) => normalizePrice(p.price))
+        .filter(Boolean);
+
+      return tokens.every((token) => {
+        const fields = isPriceToken(token) ? priceFields : modelFields;
+        return fields.some((field) => field.includes(token));
+      });
+    }
+
+    function getPreferredPriceIndex(item, tokens) {
+      if (!item.prices || item.prices.length <= 1) return 0;
+      const priceTokens = tokens.filter(isPriceToken);
+      if (!priceTokens.length) return 0;
+      for (let i = 0; i < item.prices.length; i += 1) {
+        const priceDigits = normalizePrice(item.prices[i].price);
+        if (priceTokens.some((token) => priceDigits.includes(token))) {
+          return i;
+        }
+      }
+      return 0;
+    }
+
+    function getRowsForCategory() {
+      const rows = data[category] || [];
+      if (category === "air") {
+        return rows.filter((row) => {
+          const code = String(row.model_code || "").toUpperCase();
+          if (!code || code.startsWith("AD")) return false;
+          if (!row.price) return false;
+          return row.price_type || row.source === "excel";
+        });
+      }
+      return rows;
+    }
+
+    function groupRows(rows) {
+      const map = new Map();
+      for (const row of rows) {
+        const name = row.model_name || "";
+        const code = row.model_code || "";
+        const key = `${name}||${code}`;
+        if (!map.has(key)) {
+          map.set(key, {
+            model_name: name,
+            model_code: code,
+            image_url: row.image_url || "",
+            prices: [],
+          });
+        }
+        const item = map.get(key);
+        if (!item.image_url && row.image_url) {
+          item.image_url = row.image_url;
+        }
+        const priceValue = row.price || "";
+        if (priceValue) {
+          const priceKey = `${row.price_type || ""}||${priceValue}`;
+          if (!item._priceKeys) item._priceKeys = new Set();
+          if (!item._priceKeys.has(priceKey)) {
+            item._priceKeys.add(priceKey);
+            item.prices.push({
+              type: row.price_type || "",
+              price: priceValue,
+            });
+          }
+        }
+      }
+      return Array.from(map.values()).map((item) => {
+        delete item._priceKeys;
+        return item;
+      });
+    }
+
+    function render(list, tokens = []) {
+      grid.innerHTML = "";
+      if (!list.length) {
+        empty.style.display = "block";
+        return;
+      }
+      empty.style.display = "none";
+
+      list.forEach((item, index) => {
+        const selectable = (item.prices || []).length > 1;
+        const selectedIndex = getPreferredPriceIndex(item, tokens);
+        const groupName = `price-${index}`;
+        const pricesHtml = (item.prices || [])
+          .map((p, priceIndex) => {
+            const label = p.type ? p.type : "";
+            const isSelected = selectable && priceIndex === selectedIndex;
+            const rowClass = `price-row${selectable ? " is-selectable" : ""}${
+              isSelected ? " selected" : ""
+            }`;
+            const inputHtml = selectable
+              ? `<input type="radio" name="${groupName}" ${
+                  isSelected ? "checked" : ""
+                } />`
+              : "";
+            return `
+              <label class="${rowClass}">
+                ${inputHtml}
+                <span class="price-type">${label}</span>
+                <span class="price">${formatPrice(p.price)}</span>
+              </label>
+            `;
+          })
+          .join("");
+
+        const card = document.createElement("div");
+        card.className = "card";
+        card.innerHTML = `
+          <img class="thumb" src="${item.image_url || ""}" alt="" loading="lazy" />
+          <div class="meta">
+            <span class="badge">${item.model_code || ""}</span>
+            ${item.model_name ? `<div class="name">${item.model_name}</div>` : ``}
+            <div class="prices">${pricesHtml}</div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function applySearch() {
+      const tokens = tokenizeQuery(input.value.trim());
+      const grouped = groupRows(getRowsForCategory());
+      if (!tokens.length) {
+        render(grouped);
+        return;
+      }
+      const filtered = grouped.filter((it) => matchesTokens(it, tokens));
+      render(filtered, tokens);
+    }
+
+    grid.addEventListener("change", (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement)) return;
+      if (target.type !== "radio") return;
+      const row = target.closest(".price-row");
+      const card = target.closest(".card");
+      if (!row || !card) return;
+      card.querySelectorAll(".price-row.selected").forEach((item) => {
+        item.classList.remove("selected");
+      });
+      row.classList.add("selected");
+    });
+
+    btn.addEventListener("click", applySearch);
+    input.addEventListener("keydown", (e) => {
+      if (e.key === "Enter") applySearch();
+    });
+
+    resetBtn.addEventListener("click", () => {
+      input.value = "";
+      render(groupRows(getRowsForCategory()));
+    });
+
+    waterBtn.addEventListener("click", () => {
+      category = "water";
+      input.value = "";
+      render(groupRows(getRowsForCategory()));
+    });
+
+    airBtn.addEventListener("click", () => {
+      category = "air";
+      input.value = "";
+      render(groupRows(getRowsForCategory()));
+    });
+
+    bidetBtn.addEventListener("click", () => {
+      category = "bidet";
+      input.value = "";
+      render(groupRows(getRowsForCategory()));
+    });
+
+    render(groupRows(getRowsForCategory()));
+</script>
+  </body>
+</html>
