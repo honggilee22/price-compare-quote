@@ -1279,6 +1279,9 @@
         const productFrame = document.getElementById("product-frame");
         const guideFrame = document.getElementById("guide-frame");
         const menuButtons = document.querySelectorAll(".menu button[data-view]");
+        if (view === "guide") {
+          view = "price";
+        }
         canvas.classList.remove("view-price", "view-guide", "view-product", "view-quote");
         canvas.classList.add(`view-${view}`);
         if (view === "guide" && guideFrame && window.productInfoHtml) {
@@ -1308,6 +1311,19 @@
           setView(btn.dataset.view);
         });
       });
+
+      const guideButton = document.querySelector('.menu button[data-view="guide"]');
+      if (guideButton) {
+        const prevDivider = guideButton.previousElementSibling;
+        const nextDivider = guideButton.nextElementSibling;
+        guideButton.style.display = "none";
+        if (prevDivider && prevDivider.classList.contains("divider")) {
+          prevDivider.style.display = "none";
+        }
+        if (nextDivider && nextDivider.classList.contains("divider")) {
+          nextDivider.style.display = "none";
+        }
+      }
 
       const exportBtn = document.getElementById("export-csv");
       if (exportBtn) {

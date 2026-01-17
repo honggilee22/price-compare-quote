@@ -412,6 +412,12 @@
       const section = document.getElementById(id);
       if (section) section.classList.remove("is-hidden");
     });
+    if (ids.length) {
+      const first = document.getElementById(ids[0]);
+      if (first) {
+        first.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
   }
 
   document.querySelectorAll('.toc-chapter-btn').forEach(btn => {
