@@ -85,7 +85,7 @@
         position: relative;
         font-size: 18px;
         font-weight: 700;
-        color: var(--accent);
+        color: var(--ink);
       }
 
       .summary-action {
@@ -101,6 +101,22 @@
         color: var(--muted);
         font-size: 12px;
         font-weight: 600;
+      }
+
+      .summary-point {
+        color: var(--accent);
+        font-weight: 800;
+      }
+
+      .summary-label-discount {
+        color: var(--accent);
+        font-weight: 700;
+      }
+
+      .summary-point-extra,
+      .summary-label-extra {
+        color: #5b8def;
+        font-weight: 800;
       }
 
       .plans {
@@ -564,7 +580,7 @@
         <div class="plans">
           <div class="plan" data-plan="1">
           <div class="plan-head">
-            <span class="plan-title">1안</span>
+            <span class="plan-title">기존 요금</span>
             <div class="total-box">
               <span class="total-label">총액</span>
               <span class="total-value" data-total>0원</span>
@@ -616,7 +632,7 @@
 
           <div class="plan" data-plan="2">
           <div class="plan-head">
-            <span class="plan-title">2안</span>
+            <span class="plan-title">제안 요금</span>
             <div class="total-box">
               <span class="total-label">총액</span>
               <span class="total-value" data-total>0원</span>
@@ -895,8 +911,8 @@
         const email = document.getElementById("quote-email")?.value.trim() ?? "";
         const plan1El = document.querySelector('[data-plan="1"]');
         const plan2El = document.querySelector('[data-plan="2"]');
-        const plan1 = collectPlanData(plan1El, "1안");
-        const plan2 = collectPlanData(plan2El, "2안");
+        const plan1 = collectPlanData(plan1El, "기존 요금");
+        const plan2 = collectPlanData(plan2El, "제안 요금");
         return {
           recipient,
           ext,
@@ -1053,14 +1069,25 @@
           document.getElementById("summary-text") || document.getElementById("summary");
         if (total2 < total1) {
           const diff = total1 - total2;
-          summary.textContent = `연 ${formatWon(diff * 12)} 할인 / 월 ${formatWon(diff)} 할인`;
+          summary.innerHTML =
+            `✔ 제안 요금 선택 시 ` +
+            `<span class="summary-label-discount">연</span> ` +
+            `<span class="summary-point">${formatWon(diff * 12)}</span> ` +
+            `<span class="summary-label-discount">할인</span> / ` +
+            `<span class="summary-label-discount">월</span> ` +
+            `<span class="summary-point">${formatWon(diff)}</span> ` +
+            `<span class="summary-label-discount">할인</span>`;
           return;
         }
         if (total2 > total1) {
-          summary.textContent = `월 ${formatWon(total2 - total1)} 추가`;
+          summary.innerHTML =
+            `✔ 제안 요금 선택 시 ` +
+            `<span class="summary-label-extra">월</span> ` +
+            `<span class="summary-point-extra">${formatWon(total2 - total1)}</span> ` +
+            `<span class="summary-label-extra">추가</span>`;
           return;
         }
-        summary.textContent = "차이 0원";
+        summary.textContent = "✔ 제안 요금 선택 시 차이 없음";
       }
 
       function buildQuoteSummaryHtml() {
@@ -1068,15 +1095,15 @@
         const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
         const quoteDate = document.getElementById("quote-date")?.value ?? "";
         const email = document.getElementById("quote-email")?.value.trim() ?? "";
-        const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "1안");
-        const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "2안");
+        const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "기존 요금");
+        const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "제안 요금");
         return `
           <div>수신: ${recipient || "-"}</div>
           <div>내선번호: ${ext || "-"}</div>
           <div>견적일: ${quoteDate || "-"}</div>
           <div>이메일: ${email || "-"}</div>
-          <div>1안 총액: ${formatWon(plan1.total || 0)}</div>
-          <div>2안 총액: ${formatWon(plan2.total || 0)}</div>
+          <div>기존 요금 총액: ${formatWon(plan1.total || 0)}</div>
+          <div>제안 요금 총액: ${formatWon(plan2.total || 0)}</div>
         `;
       }
 
@@ -1130,22 +1157,22 @@
         const quoteDate = document.getElementById("quote-date")?.value ?? "";
         const email = document.getElementById("quote-email")?.value.trim() ?? "";
 
-        const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "1안");
-        const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "2안");
+        const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "기존 요금");
+        const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "제안 요금");
         const diff = plan2.total - plan1.total;
         const diffYear = diff * 12;
         const monthlyJudge =
           diff === 0
             ? "차이 없음"
             : diff < 0
-              ? `2안이 월 ${format.format(Math.abs(diff))}원 저렴`
-              : `2안이 월 ${format.format(diff)}원 추가`;
+              ? `제안 요금이 월 ${format.format(Math.abs(diff))}원 할인`
+              : `제안 요금이 월 ${format.format(diff)}원 추가`;
         const yearlyJudge =
           diffYear === 0
             ? "차이 없음"
             : diffYear < 0
-              ? `2안이 연 ${format.format(Math.abs(diffYear))}원 저렴`
-              : `2안이 연 ${format.format(diffYear)}원 추가`;
+              ? `제안 요금이 연 ${format.format(Math.abs(diffYear))}원 할인`
+              : `제안 요금이 연 ${format.format(diffYear)}원 추가`;
 
         const rows = [];
         rows.push(["구분", "항목", "값"]);
@@ -1156,13 +1183,13 @@
         rows.push([]);
         rows.push(["구분", "안", "모델", "가격", "대수", "총가격"]);
         plan1.rows.forEach((item) => {
-          rows.push(["제품", "1안", item.model, item.price, item.qty, item.total]);
+          rows.push(["제품", "기존 요금", item.model, item.price, item.qty, item.total]);
         });
         plan2.rows.forEach((item) => {
-          rows.push(["제품", "2안", item.model, item.price, item.qty, item.total]);
+          rows.push(["제품", "제안 요금", item.model, item.price, item.qty, item.total]);
         });
         rows.push([]);
-        rows.push(["요약", "항목", "1안", "2안", "차이(2안-1안)", "판단"]);
+        rows.push(["요약", "항목", "기존 요금", "제안 요금", "차이(제안-기존)", "판단"]);
         rows.push(["요약", "월 총액", plan1.total, plan2.total, diff, monthlyJudge]);
         rows.push([
           "요약",
