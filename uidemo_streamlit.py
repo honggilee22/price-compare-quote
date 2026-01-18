@@ -18,6 +18,7 @@ import tempfile
 import time
 
 import openpyxl
+from openpyxl.styles import Alignment
 import streamlit as st
 import streamlit.components.v1 as components
 
@@ -36,7 +37,7 @@ CSV_PATHS = [
 HARDCODE_GMAIL_USER = "jumsune2@gmail.com"
 HARDCODE_GMAIL_APP_PASSWORD = ""
 
-MAX_TEMPLATE_ROWS = 9
+MAX_TEMPLATE_ROWS = 3
 COMPONENT_HEIGHT = 1200
 
 BRIDGE_SCRIPT = """<script id=\"price-compare-bridge\">
@@ -78,16 +79,15 @@ BRIDGE_SCRIPT = """<script id=\"price-compare-bridge\">
   }
 
   function ensurePdfButton() {
-    const summary = document.getElementById("summary");
     const csvBtn = document.getElementById("export-csv");
-    if (!summary || !csvBtn) return;
+    const actions = document.getElementById("export-actions");
+    if (!actions || !csvBtn) return;
     if (document.getElementById("export-pdf")) return;
 
     const pdfBtn = csvBtn.cloneNode(true);
     pdfBtn.id = "export-pdf";
     pdfBtn.textContent = "PDF 저장";
-    pdfBtn.style.right = "90px";
-    summary.appendChild(pdfBtn);
+    actions.appendChild(pdfBtn);
 
     pdfBtn.addEventListener("click", () => {
       updateAll();
@@ -397,21 +397,26 @@ def normalize_rows(rows):
         model = str(row.get("model", "") or "").strip()
         price = parse_number(row.get("price"))
         qty = parse_number(row.get("qty"))
-        if model or price or qty:
-            normalized.append({"model": model, "price": price, "qty": qty})
+        promo_price = parse_number(row.get("promo_price"))
+        if model or price or qty or promo_price:
+            normalized.append(
+                {"model": model, "price": price, "qty": qty, "promo_price": promo_price}
+            )
     if not normalized:
-        normalized = [{"model": "", "price": 0, "qty": 0}]
+        normalized = [{"model": "", "price": 0, "qty": 0, "promo_price": 0}]
     while len(normalized) < MAX_TEMPLATE_ROWS:
-        normalized.append({"model": "", "price": 0, "qty": 0})
+        normalized.append({"model": "", "price": 0, "qty": 0, "promo_price": 0})
     return normalized[:MAX_TEMPLATE_ROWS]
 
 
-def compute_totals(rows):
+def compute_totals(rows, use_promo=False):
     total_sum = 0
     for row in rows:
         price = parse_number(row.get("price"))
         qty = parse_number(row.get("qty"))
-        total_sum += price * qty
+        promo_price = parse_number(row.get("promo_price"))
+        effective_price = promo_price if use_promo and promo_price else price
+        total_sum += effective_price * qty
     return total_sum
 
 
@@ -450,10 +455,12 @@ def fill_template(
     plan2_total,
     plan1_prepay,
     plan2_prepay,
+    plan2_promo_enabled=False,
     summary_text="",
 ):
     wb = load_template()
     ws = wb.active
+    template_rows = [15, 17, 19]
 
     ws["B4"] = recipient or ""
     ws["B13"] = summary_text or ""
@@ -466,8 +473,8 @@ def fill_template(
     ws["E12"] = plan1_prepay
     ws["N12"] = plan2_prepay
 
-    for index, row in enumerate(plan1_rows):
-        excel_row = 15 + index
+    for index, row in enumerate(plan1_rows[: len(template_rows)]):
+        excel_row = template_rows[index]
         model = row.get("model", "")
         price = parse_number(row.get("price"))
         qty = parse_number(row.get("qty"))
@@ -477,16 +484,34 @@ def fill_template(
         ws[f"G{excel_row}"] = qty if qty else ""
         ws[f"H{excel_row}"] = total if total else ""
 
-    for index, row in enumerate(plan2_rows):
-        excel_row = 15 + index
+    for index, row in enumerate(plan2_rows[: len(template_rows)]):
+        excel_row = template_rows[index]
         model = row.get("model", "")
         price = parse_number(row.get("price"))
         qty = parse_number(row.get("qty"))
+        promo_price = parse_number(row.get("promo_price"))
         total = price * qty
+        promo_total = promo_price * qty
+
         ws[f"K{excel_row}"] = model
-        ws[f"N{excel_row}"] = price if price else ""
         ws[f"P{excel_row}"] = qty if qty else ""
-        ws[f"Q{excel_row}"] = total if total else ""
+
+        if plan2_promo_enabled and promo_price:
+            ws[f"N{excel_row}"] = price if price else ""
+            ws[f"Q{excel_row}"] = total if total else ""
+            ws[f"N{excel_row + 1}"] = promo_price if promo_price else ""
+            ws[f"Q{excel_row + 1}"] = promo_total if promo_total else ""
+            ws[f"N{excel_row + 1}"].font = ws[f"N{excel_row + 1}"].font.copy(
+                color="FF0000"
+            )
+            ws[f"Q{excel_row + 1}"].font = ws[f"Q{excel_row + 1}"].font.copy(
+                color="FF0000"
+            )
+        else:
+            ws[f"N{excel_row}"] = price if price else ""
+            ws[f"Q{excel_row}"] = total if total else ""
+            ws[f"N{excel_row + 1}"] = ""
+            ws[f"Q{excel_row + 1}"] = ""
 
     return wb
 
@@ -613,17 +638,28 @@ def handle_event(event, save_dir):
 
     plan1_rows = (data.get("plan1") or {}).get("rows") or []
     plan2_rows = (data.get("plan2") or {}).get("rows") or []
+    plan2_promo_enabled = bool((data.get("plan2") or {}).get("promo_enabled"))
     plan1_rows_norm = normalize_rows(plan1_rows)
     plan2_rows_norm = normalize_rows(plan2_rows)
 
     plan1_total = compute_totals(plan1_rows_norm)
-    plan2_total = compute_totals(plan2_rows_norm)
+    plan2_total = compute_totals(plan2_rows_norm, use_promo=plan2_promo_enabled)
 
     discount1 = max(parse_float(data.get("discount1")), 0.0)
     discount2 = max(parse_float(data.get("discount2")), 0.0)
-    plan1_prepay = int(round(plan1_total * (1 - discount1)))
-    plan2_prepay = int(round(plan2_total * (1 - discount2)))
-    summary_text = build_summary_text(plan1_prepay, plan2_prepay)
+    plan1_effective = (
+        int(round(plan1_total * (1 - discount1))) if discount1 > 0 else plan1_total
+    )
+    plan2_effective = (
+        int(round(plan2_total * (1 - discount2))) if discount2 > 0 else plan2_total
+    )
+    plan1_monthly = plan1_total
+    plan2_monthly = plan2_total
+    plan1_prepay = int(round(plan1_total * (1 - discount1))) if discount1 > 0 else ""
+    plan2_prepay = int(round(plan2_total * (1 - discount2))) if discount2 > 0 else ""
+    summary_text = build_summary_text(plan1_effective, plan2_effective)
+    if plan2_promo_enabled:
+        summary_text = f"{summary_text} (프로모션적용)"
 
     xlsx_bytes = build_excel_bytes(
         recipient=recipient,
@@ -632,10 +668,11 @@ def handle_event(event, save_dir):
         email=email,
         plan1_rows=plan1_rows_norm,
         plan2_rows=plan2_rows_norm,
-        plan1_total=plan1_total,
-        plan2_total=plan2_total,
+        plan1_total=plan1_monthly,
+        plan2_total=plan2_monthly,
         plan1_prepay=plan1_prepay,
         plan2_prepay=plan2_prepay,
+        plan2_promo_enabled=plan2_promo_enabled,
         summary_text=summary_text,
     )
 
