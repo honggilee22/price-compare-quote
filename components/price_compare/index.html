@@ -32,12 +32,39 @@
       const frame = document.getElementById("frame");
       let lastResponseId = null;
       let currentHash = null;
+      let pendingResponse = null;
+      let frameLoaded = false;
+      let responseRetryTimer = null;
+
+      function deliverResponseToFrame() {
+        if (!pendingResponse || !frameLoaded || !frame || !frame.contentWindow) return;
+        frame.contentWindow.postMessage(
+          { source: "price-compare-response", payload: pendingResponse },
+          "*"
+        );
+        if (!responseRetryTimer) {
+          responseRetryTimer = setInterval(() => {
+            if (!pendingResponse) {
+              clearInterval(responseRetryTimer);
+              responseRetryTimer = null;
+              return;
+            }
+            deliverResponseToFrame();
+          }, 500);
+        }
+      }
+
+      frame.addEventListener("load", () => {
+        frameLoaded = true;
+        deliverResponseToFrame();
+      });
 
       function handleRender(event) {
         const data = event.detail;
         const args = data.args || {};
         if (args.html && args.html_hash && args.html_hash !== currentHash) {
           currentHash = args.html_hash;
+          frameLoaded = false;
           frame.srcdoc = args.html;
         }
         const contentWidth = args.content_width || args.width;
@@ -61,6 +88,8 @@
         const response = args.response;
         if (response && response.id && response.id !== lastResponseId) {
           lastResponseId = response.id;
+          pendingResponse = response;
+          deliverResponseToFrame();
           if (response.type === "pdf") {
             const link = document.createElement("a");
             link.href = `data:application/pdf;base64,${response.content}`;
@@ -68,18 +97,6 @@
             document.body.appendChild(link);
             link.click();
             link.remove();
-            if (response.message) {
-              alert(response.message);
-            }
-          } else if (response.type === "preview") {
-            if (frame && frame.contentWindow) {
-              frame.contentWindow.postMessage(
-                { source: "price-compare-response", payload: response },
-                "*"
-              );
-            }
-          } else if (response.type === "message") {
-            alert(response.message || "");
           }
         }
       }
@@ -89,8 +106,27 @@
       Streamlit.setFrameHeight();
 
       window.addEventListener("message", (event) => {
-        if (!event.data || event.data.source !== "price-compare") return;
-        Streamlit.setComponentValue(event.data.payload);
+        if (!event.data) return;
+        if (event.data.source === "price-compare-response-ack") {
+          const responseId = event.data.response_id;
+          if (!responseId) return;
+          if (pendingResponse && pendingResponse.id === responseId) {
+            pendingResponse = null;
+          }
+          if (responseRetryTimer) {
+            clearInterval(responseRetryTimer);
+            responseRetryTimer = null;
+          }
+          Streamlit.setComponentValue({
+            action: "ack_response",
+            response_id: responseId,
+            request_id: `ack-${responseId}`,
+          });
+          return;
+        }
+        if (event.data.source === "price-compare") {
+          Streamlit.setComponentValue(event.data.payload);
+        }
       });
     </script>
   </body>

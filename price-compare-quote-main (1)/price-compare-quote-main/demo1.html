@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <title>교체 안내 (고객용)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    :root{
+      --bg:#f6f7fb;
+      --card:#ffffff;
+      --line:#e6e8ef;
+      --ink:#111827;
+      --muted:#6b7280;
+
+      /* 요청 색상 */
+      --titleBlue:#2563eb;         /* 타이틀 파란 배경 */
+      --titleBlueDeep:#1d4ed8;
+      --contentOrange:#fff3e6;     /* 내용 옅은 주황 칸 */
+      --contentOrangeLine:#ffd7b0; /* 주황 테두리 */
+    }
+
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:-apple-system,BlinkMacSystemFont,"Noto Sans KR",sans-serif;
+      background:var(--bg);
+      color:var(--ink);
+      line-height:1.65;
+    }
+
+    :root{
+      --toc-width:260px;
+      --toc-gap:20px;
+    }
+
+    .layout{
+      max-width:1200px;
+      margin:0 auto;
+      padding:16px 16px 60px;
+      padding-left:calc(var(--toc-width) + var(--toc-gap) + 16px);
+      display:block;
+    }
+
+    /* ===== 목차 (왼쪽 고정 레이어) ===== */
+    .toc{
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      width:var(--toc-width);
+      z-index:10;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      padding:16px 12px 20px;
+      background:#ffffff;
+      border-right:1px solid var(--line);
+      overflow-y:auto;
+    }
+
+    .toc-title{
+      font-size:13px;
+      color:var(--muted);
+      margin:0 0 6px;
+      font-weight:700;
+    }
+
+    .toc a{
+      display:flex;
+      text-decoration:none;
+      color:var(--ink);
+      font-size:13px;
+      padding:6px 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+      margin:0;
+      line-height:1.4;
+    }
+    .toc a:hover{
+      border-color:var(--line);
+      background:#f9fafb;
+    }
+    .toc a.active{
+      background:#eef2ff;
+      border-color:#c7d2fe;
+      color:#1e40af;
+      font-weight:800;
+    }
+
+    .toc-chapter{
+      margin-top:8px;
+      font-size:12px;
+      font-weight:800;
+      color:#1f2937;
+      letter-spacing:-0.2px;
+    }
+
+    .toc-chapter-btn{
+      width:100%;
+      text-align:left;
+      padding:6px 8px;
+      border-radius:10px;
+      border:1px solid var(--line);
+      background:#f9fafb;
+      cursor:pointer;
+    }
+
+    .toc-group{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+
+    .toc-group.is-collapsed > a{
+      display:none;
+    }
+
+    .section.is-hidden{
+      display:none;
+    }
+
+    /* ===== 본문 섹션 ===== */
+    .section{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:16px;
+      overflow:hidden;
+      margin:0 auto 16px;
+      scroll-margin-top:18px;
+    }
+
+    /* 타이틀(파란색) */
+    .section-head{
+      background:linear-gradient(0deg,var(--titleBlue),var(--titleBlueDeep));
+      color:#fff;
+      padding:14px 16px;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .section-num{
+      width:32px;
+      height:32px;
+      border-radius:10px;
+      background:rgba(255,255,255,.18);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight:900;
+      font-size:14px;
+      flex:0 0 auto;
+    }
+    .section-title{
+      font-size:16px;
+      font-weight:900;
+      letter-spacing:-0.2px;
+    }
+
+    /* 내용(옅은 주황 칸) */
+    .section-body{
+      padding:16px;
+    }
+    .content-box{
+      background:var(--contentOrange);
+      border:1px solid var(--contentOrangeLine);
+      border-radius:14px;
+      padding:14px 14px;
+      font-size:15px;
+      color:#1f2937;
+    }
+    .content-box .hint{
+      margin-top:10px;
+      font-size:13px;
+      color:#7c2d12;
+      opacity:.9;
+    }
+
+    /* 모바일 */
+    @media (max-width: 980px){
+      :root{
+        --toc-width:100%;
+        --toc-gap:0px;
+      }
+      .layout{
+        padding-left:16px;
+        padding-top:120px;
+      }
+      .toc{
+        position:fixed;
+        top:0;
+        left:0;
+        right:0;
+        bottom:auto;
+        width:100%;
+        flex-direction:row;
+        align-items:center;
+        overflow-x:auto;
+        overflow-y:hidden;
+        white-space:nowrap;
+      }
+      .toc a{
+        display:inline-flex;
+        border-radius:999px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+<div class="layout">
+  <!-- ===== 목차(클릭하면 해당 섹션으로 이동) ===== -->
+  <nav class="toc" aria-label="목차">
+    <p class="toc-title">목차 (클릭해서 바로 이동)</p>
+
+    <div class="toc-group" data-chapter="1">
+      <button type="button" class="toc-chapter toc-chapter-btn" data-toggle="1">
+        1. 교체 안내 요약
+      </button>
+      <a href="#s01">1. 방문 이유</a>
+      <a href="#s02">2. 현재 사용 상태 요약</a>
+      <a href="#s03">3. 가장 많이 헷갈리는 부분</a>
+      <a href="#s04">4. 약정기간 vs 소유권 이전기간</a>
+      <a href="#s05">5. 지금 구간의 핵심 (비용 없음)</a>
+      <a href="#s06">6. 관공서는 왜 이 시점에 교체하는지</a>
+      <a href="#s07">7. 교체 안 하면 생기는 번거로움</a>
+      <a href="#s08">8. 교체 시 얻는 변화 (신제품 / 스펙업 / 요금 구조)</a>
+    </div>
+
+    <div class="toc-group is-collapsed" data-chapter="2">
+      <button type="button" class="toc-chapter toc-chapter-btn" data-toggle="2">
+        2. 교체 진행 절차
+      </button>
+      <a href="#s09">9. 교체 절차 한눈에 보기</a>
+      <a href="#s10">10. 정산·반환·서류 처리 방식 (사무실 처리)</a>
+      <a href="#s11">11. 계약서 제공 시점</a>
+    </div>
+
+    <div class="toc-group is-collapsed" data-chapter="3">
+      <button type="button" class="toc-chapter toc-chapter-btn" data-toggle="3">
+        3. 참고 안내
+      </button>
+      <a href="#s12">12. 꼭 바꿔야 하나요?</a>
+      <a href="#s13">13. 의무 사항은 아닙니다</a>
+      <a href="#s14">14. 이 구간에 교체하는 이유</a>
+      <a href="#s15">15. 가장 많이 확인하시는 부분</a>
+      <a href="#s16">16. 해당 부분 처리 방식</a>
+    </div>
+
+    <div class="toc-group is-collapsed" data-chapter="4">
+      <button type="button" class="toc-chapter toc-chapter-btn" data-toggle="4">
+        4. 관리 및 정리
+      </button>
+      <a href="#s17">17. 회사 변경 구조 설명</a>
+      <a href="#s18">18. 여러 회사 제품 관리 방식</a>
+      <a href="#s19">19. 전체 요약</a>
+      <a href="#s20">20. 선택 확인</a>
+    </div>
+  </nav>
+
+  <!-- ===== 본문 ===== -->
+  <main>
+    <!-- ✅ 각 content-box 안에 네가 정리한 본문을 붙여 넣으면 됨 -->
+
+    <section class="section" id="s01">
+      <div class="section-head">
+        <div class="section-num">1</div>
+        <div class="section-title">방문 이유</div>
+      </div>
+      <div class="section-body">
+        <div class="content-box">
+          <!-- 여기에 본문 입력 -->
+          <b>[여기에 네 문장 붙여넣기]</b>
+          <div class="hint">※ 고객에게 보여주는 문장만. (나/프로그램 설명 X)</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="s02">
+      <div class="section-head"><div class="section-num">2</div><div class="section-title">현재 사용 상태 요약</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s03">
+      <div class="section-head"><div class="section-num">3</div><div class="section-title">가장 많이 헷갈리는 부분</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s04">
+      <div class="section-head"><div class="section-num">4</div><div class="section-title">약정기간 vs 소유권 이전기간</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s05">
+      <div class="section-head"><div class="section-num">5</div><div class="section-title">지금 구간의 핵심 (비용 없음)</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s06">
+      <div class="section-head"><div class="section-num">6</div><div class="section-title">관공서는 왜 이 시점에 교체하는지</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s07">
+      <div class="section-head"><div class="section-num">7</div><div class="section-title">교체 안 하면 생기는 번거로움</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s08">
+      <div class="section-head"><div class="section-num">8</div><div class="section-title">교체 시 얻는 변화 (신제품 / 스펙업 / 요금 구조)</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s09">
+      <div class="section-head"><div class="section-num">9</div><div class="section-title">교체 절차 한눈에 보기</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s10">
+      <div class="section-head"><div class="section-num">10</div><div class="section-title">정산·반환·서류 처리 방식 (사무실 처리)</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s11">
+      <div class="section-head"><div class="section-num">11</div><div class="section-title">계약서 제공 시점</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s12">
+      <div class="section-head"><div class="section-num">12</div><div class="section-title">꼭 바꿔야 하나요?</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s13">
+      <div class="section-head"><div class="section-num">13</div><div class="section-title">의무 사항은 아닙니다</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s14">
+      <div class="section-head"><div class="section-num">14</div><div class="section-title">이 구간에 교체하는 이유</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s15">
+      <div class="section-head"><div class="section-num">15</div><div class="section-title">가장 많이 확인하시는 부분</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s16">
+      <div class="section-head"><div class="section-num">16</div><div class="section-title">해당 부분 처리 방식</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s18">
+      <div class="section-head"><div class="section-num">18</div><div class="section-title">여러 회사 제품 관리 방식</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s19">
+      <div class="section-head"><div class="section-num">19</div><div class="section-title">전체 요약</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s20">
+      <div class="section-head"><div class="section-num">20</div><div class="section-title">선택 확인</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+    <section class="section" id="s17">
+      <div class="section-head"><div class="section-num">17</div><div class="section-title">회사 변경 구조 설명</div></div>
+      <div class="section-body"><div class="content-box">[본문]</div></div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+  // 목차 active 하이라이트 (스크롤 따라다님)
+  const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+  const sections = tocLinks
+    .map(a => document.querySelector(a.getAttribute('href')))
+    .filter(Boolean);
+
+  function setActive() {
+    let current = sections[0];
+    for (const sec of sections) {
+      const top = sec.getBoundingClientRect().top;
+      if (top <= 140) current = sec;
+      else break;
+    }
+    tocLinks.forEach(a => {
+      a.classList.toggle('active', a.getAttribute('href') === `#${current.id}`);
+    });
+  }
+
+  window.addEventListener('scroll', setActive, { passive: true });
+  setActive();
+
+  const chapterMap = {
+    "1": ["s01", "s02", "s03", "s04", "s05", "s06", "s07", "s08"],
+    "2": ["s09", "s10", "s11"],
+    "3": ["s12", "s13", "s14", "s15", "s16"],
+    "4": ["s17", "s18", "s19", "s20"]
+  };
+
+  function setChapterVisible(chapter) {
+    document.querySelectorAll(".section").forEach(section => {
+      section.classList.add("is-hidden");
+    });
+    const ids = chapterMap[String(chapter)] || [];
+    ids.forEach(id => {
+      const section = document.getElementById(id);
+      if (section) section.classList.remove("is-hidden");
+    });
+    if (ids.length) {
+      const first = document.getElementById(ids[0]);
+      if (first) {
+        first.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    }
+  }
+
+  document.querySelectorAll('.toc-chapter-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const chapter = btn.getAttribute('data-toggle');
+      const group = document.querySelector(`.toc-group[data-chapter="${chapter}"]`);
+      if (!group) return;
+      const isCollapsed = group.classList.contains('is-collapsed');
+      document.querySelectorAll('.toc-group').forEach(g => g.classList.add('is-collapsed'));
+      group.classList.toggle('is-collapsed', !isCollapsed);
+      setChapterVisible(chapter);
+    });
+  });
+
+  setChapterVisible("1");
+  document.querySelectorAll('.toc-group').forEach(group => {
+    if (group.getAttribute('data-chapter') !== '1') {
+      group.classList.add('is-collapsed');
+    } else {
+      group.classList.remove('is-collapsed');
+    }
+  });
+</script>
+
+</body>
+</html>

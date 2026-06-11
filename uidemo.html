@@ -316,6 +316,59 @@
         color: var(--accent);
       }
 
+      .model-slot {
+        display: grid;
+        gap: 6px;
+      }
+
+      .model-slot .model,
+      .model-slot .chungho-select {
+        width: 100%;
+        height: 34px;
+        border-radius: 8px;
+        border: var(--line-width) solid var(--line);
+        padding: 0 10px;
+        font-size: 12px;
+        box-sizing: border-box;
+        background: #ffffff;
+        color: var(--ink);
+      }
+
+      .model-slot .chungho-select[hidden],
+      .model-slot .model[hidden] {
+        display: none;
+      }
+
+      .remarks-field {
+        display: grid;
+        gap: 8px;
+        margin-top: 12px;
+      }
+
+      .remarks-input {
+        width: 100%;
+        min-height: 96px;
+        resize: vertical;
+        border-radius: 10px;
+        border: var(--line-width) solid var(--line);
+        padding: 10px 12px;
+        box-sizing: border-box;
+        font: inherit;
+        color: var(--ink);
+        background: #ffffff;
+      }
+
+      .remarks-help {
+        font-size: 12px;
+        color: var(--muted);
+      }
+
+      .remarks-help__product {
+        color: #0563c1;
+        font-weight: 700;
+        text-decoration: underline;
+      }
+
       .row-delete {
         height: 22px;
         padding: 0 8px;
@@ -589,6 +642,63 @@
         align-items: center;
         white-space: nowrap;
       }
+
+      .mode-switch {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 10px;
+      }
+
+      .mode-switch button {
+        height: 34px;
+        padding: 0 12px;
+        border-radius: 10px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        color: var(--muted);
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .mode-switch button.active {
+        background: linear-gradient(135deg, #ff7f7f, #ffb18a);
+        color: #ffffff;
+      }
+
+      .canvas.mode-single .plan[data-plan="2"] {
+        display: none;
+      }
+
+      .canvas.mode-single .plans {
+        grid-template-columns: 1fr;
+      }
+
+      .job-status {
+        display: none;
+        margin-top: 10px;
+        padding: 12px 14px;
+        border-radius: 10px;
+        border: var(--line-width) solid var(--line);
+        background: #ffffff;
+        font-size: 13px;
+        font-weight: 700;
+      }
+
+      .job-status.is-visible {
+        display: block;
+      }
+
+      .job-status.is-error {
+        border-color: #fecaca;
+        background: #fff1f2;
+        color: #b91c1c;
+      }
+
+      .job-status.is-success {
+        border-color: #bbf7d0;
+        background: #f0fdf4;
+        color: #166534;
+      }
     </style>
   </head>
   <body>
@@ -604,11 +714,15 @@
       </div>
 
       <div class="price-view">
+        <div class="mode-switch" aria-label="견적 모드">
+          <button class="active" type="button" data-mode="compare">비교견적서</button>
+          <button type="button" data-mode="single">단일견적서</button>
+        </div>
         <div class="summary" id="summary">
           <span id="summary-text">차이 0원</span>
         </div>
 
-        <div class="quote">
+        <div class="quote" id="flow-section-info">
           <label class="quote-field">
             <span class="quote-label">수신</span>
             <span class="quote-input-group">
@@ -630,7 +744,7 @@
           </label>
         </div>
 
-        <div class="plans">
+        <div class="plans" id="flow-section-plans">
           <div class="plan" data-plan="1">
           <div class="plan-head">
             <span class="plan-title">기존 요금</span>
@@ -654,7 +768,11 @@
               <span>총가격</span>
             </div>
             <div class="row data">
-              <input class="cell model" type="text" />
+              <div class="cell model-slot">
+                <input class="model" type="text" />
+                <select class="chungho-select chungho-category" hidden></select>
+                <select class="chungho-select chungho-product" hidden disabled></select>
+              </div>
               <input class="cell price" type="number" min="0" />
               <input class="cell qty" type="number" min="0" />
               <div class="cell row-total">
@@ -663,7 +781,11 @@
               </div>
             </div>
             <div class="row data">
-              <input class="cell model" type="text" />
+              <div class="cell model-slot">
+                <input class="model" type="text" />
+                <select class="chungho-select chungho-category" hidden></select>
+                <select class="chungho-select chungho-product" hidden disabled></select>
+              </div>
               <input class="cell price" type="number" min="0" />
               <input class="cell qty" type="number" min="0" />
               <div class="cell row-total">
@@ -672,7 +794,11 @@
               </div>
             </div>
             <div class="row data">
-              <input class="cell model" type="text" />
+              <div class="cell model-slot">
+                <input class="model" type="text" />
+                <select class="chungho-select chungho-category" hidden></select>
+                <select class="chungho-select chungho-product" hidden disabled></select>
+              </div>
               <input class="cell price" type="number" min="0" />
               <input class="cell qty" type="number" min="0" />
               <div class="cell row-total">
@@ -707,7 +833,11 @@
               <span>총가격</span>
             </div>
             <div class="row data">
-              <input class="cell model" type="text" />
+              <div class="cell model-slot">
+                <input class="model" type="text" />
+                <select class="chungho-select chungho-category" hidden></select>
+                <select class="chungho-select chungho-product" hidden disabled></select>
+              </div>
               <input class="cell price" type="number" min="0" />
               <input class="cell qty" type="number" min="0" />
               <div class="cell row-total">
@@ -716,7 +846,11 @@
               </div>
             </div>
             <div class="row data">
-              <input class="cell model" type="text" />
+              <div class="cell model-slot">
+                <input class="model" type="text" />
+                <select class="chungho-select chungho-category" hidden></select>
+                <select class="chungho-select chungho-product" hidden disabled></select>
+              </div>
               <input class="cell price" type="number" min="0" />
               <input class="cell qty" type="number" min="0" />
               <div class="cell row-total">
@@ -725,7 +859,11 @@
               </div>
             </div>
             <div class="row data">
-              <input class="cell model" type="text" />
+              <div class="cell model-slot">
+                <input class="model" type="text" />
+                <select class="chungho-select chungho-category" hidden></select>
+                <select class="chungho-select chungho-product" hidden disabled></select>
+              </div>
               <input class="cell price" type="number" min="0" />
               <input class="cell qty" type="number" min="0" />
               <div class="cell row-total">
@@ -736,8 +874,35 @@
           </div>
           </div>
         </div>
-        <div class="export-actions" id="export-actions">
-          <button class="export-action" type="button" id="export-csv">CSV 저장</button>
+        <label class="remarks-field">
+          <span class="quote-label">특이사항</span>
+          <span class="remarks-help">
+            <span class="remarks-help__product">@상품명</span>
+            클릭하시면 카달로그 페이지로 이동 합니다
+          </span>
+          <textarea
+            class="remarks-input"
+            id="quote-remarks"
+            placeholder="견적서에 표시할 특이사항을 입력하세요."
+          >@상품명 클릭하시면 카달로그 페이지로 이동 합니다</textarea>
+        </label>
+        <div class="export-actions" id="flow-section-export">
+          <button class="export-action" type="button" id="reset-form">초기화</button>
+          <button class="export-action" type="button" id="export-csv">PDF 만들기</button>
+        </div>
+        <div id="job-status" class="job-status" role="status" aria-live="polite"></div>
+        <div
+          id="pdf-progress"
+          style="position:fixed;inset:0;background:rgba(15,23,42,.46);z-index:9999;display:none;align-items:center;justify-content:center;padding:20px;"
+        >
+          <div style="width:min(420px,100%);background:#fff;border-radius:18px;padding:24px;box-shadow:0 24px 80px rgba(15,23,42,.24);">
+            <div id="pdf-progress-title" style="font-size:20px;font-weight:700;color:#0f172a;">PDF 생성 중</div>
+            <div style="margin-top:16px;height:12px;background:#e2e8f0;border-radius:999px;overflow:hidden;">
+              <div id="pdf-progress-bar" style="width:8%;height:100%;background:linear-gradient(90deg,#0f766e,#14b8a6);transition:width .35s ease;"></div>
+            </div>
+            <div id="pdf-progress-text" style="margin-top:14px;font-size:14px;color:#334155;">요청을 전송하는 중입니다.</div>
+            <div id="pdf-progress-elapsed" style="margin-top:6px;font-size:13px;color:#64748b;">0초 경과</div>
+          </div>
         </div>
       </div>
 
@@ -767,6 +932,7 @@
         <div class="quote-view__actions">
           <button class="quote-send" type="button" id="quote-send">견적서 발송</button>
         </div>
+        <div id="quote-job-status" class="job-status" role="status" aria-live="polite"></div>
       </div>
     </div>
 
@@ -783,6 +949,26 @@
 
     <script>
       const format = new Intl.NumberFormat("ko-KR");
+      const CHUNGHO_CATALOG = {
+        "정수기": [
+          { name: "슈퍼아이스트리", url: "https://planner-power.com/catalog/prod_detail.php?idx=104&pp=2&rp=16" },
+          { name: "700", url: "https://planner-power.com/catalog/prod_detail.php?idx=110&pp=2&rp=16" },
+          { name: "550", url: "https://planner-power.com/catalog/prod_detail.php?idx=71&pp=2&rp=16" },
+          { name: "토타max", url: "https://planner-power.com/catalog/prod_detail.php?idx=165&pp=1&rp=8" },
+          { name: "토타", url: "https://planner-power.com/catalog/prod_detail.php?idx=108&pp=1&rp=12" },
+        ],
+        "공기청정기": [
+          { name: "서밋", url: "https://planner-power.com/catalog/prod_detail.php?idx=173&pp=2&rp=24" },
+          { name: "디오", url: "https://planner-power.com/catalog/prod_detail.php?idx=139&pp=1&rp=14" },
+        ],
+        "비데": [
+          { name: "B400", url: "https://planner-power.com/catalog/prod_detail.php?idx=164&pp=1&rp=12" },
+          { name: "B350", url: "https://planner-power.com/catalog/prod_detail.php?idx=95&pp=2&rp=24" },
+        ],
+        "변기": [
+          { name: "루컷", url: "https://planner-power.com/catalog/prod_detail.php?idx=140&pp=1&rp=2" },
+        ],
+      };
 
       function parseNumber(value) {
         const num = String(value || "").replace(/[^0-9]/g, "");
@@ -825,6 +1011,89 @@
 
       const catalogEntries = buildCatalogEntries(window.catalogData || {});
       const MAX_SUGGESTIONS = 20;
+
+      function isChunghoPlan(plan) {
+        if (!plan) return false;
+        const mode = getActiveMode();
+        const planId = plan.dataset.plan;
+        return mode === "single" ? planId === "1" : planId === "2";
+      }
+
+      function populateChunghoCategories(select, selectedCategory = "") {
+        if (!select) return;
+        const options = ['<option value="">대분류 선택</option>'];
+        Object.keys(CHUNGHO_CATALOG).forEach((category) => {
+          const selected = category === selectedCategory ? " selected" : "";
+          options.push(`<option value="${category}"${selected}>${category}</option>`);
+        });
+        select.innerHTML = options.join("");
+      }
+
+      function populateChunghoProducts(select, category, selectedProduct = "") {
+        if (!select) return;
+        const items = CHUNGHO_CATALOG[category] || [];
+        const options = ['<option value="">제품 선택</option>'];
+        items.forEach((item) => {
+          const selected = item.name === selectedProduct ? " selected" : "";
+          options.push(`<option value="${item.name}" data-url="${item.url}"${selected}>${item.name}</option>`);
+        });
+        select.innerHTML = options.join("");
+        select.disabled = !category;
+      }
+
+      function findChunghoSelection(modelName) {
+        const target = String(modelName || "").trim();
+        if (!target) return null;
+        for (const [category, items] of Object.entries(CHUNGHO_CATALOG)) {
+          const found = items.find((item) => item.name === target);
+          if (found) {
+            return { category, product: found.name };
+          }
+        }
+        return null;
+      }
+
+      function syncChunghoControls(row, preserveValue = true) {
+        if (!row) return;
+        const plan = row.closest(".plan");
+        const modelInput = row.querySelector(".model");
+        const categorySelect = row.querySelector(".chungho-category");
+        const productSelect = row.querySelector(".chungho-product");
+        if (!plan || !modelInput || !categorySelect || !productSelect) return;
+
+        const enabled = isChunghoPlan(plan);
+        if (enabled) {
+          const selection = preserveValue ? findChunghoSelection(modelInput.value) : null;
+          populateChunghoCategories(categorySelect, selection?.category || "");
+          populateChunghoProducts(productSelect, selection?.category || "", selection?.product || "");
+          categorySelect.hidden = false;
+          productSelect.hidden = false;
+          modelInput.hidden = true;
+          if (selection) {
+            modelInput.value = selection.product;
+          } else if (!preserveValue) {
+            modelInput.value = "";
+            productSelect.value = "";
+          }
+        } else {
+          categorySelect.hidden = true;
+          productSelect.hidden = true;
+          modelInput.hidden = false;
+        }
+      }
+
+      function refreshPlanCatalogMode(plan, preserveValue = true) {
+        if (!plan) return;
+        plan.querySelectorAll(".row.data").forEach((row) => {
+          if (row.classList.contains("promo")) return;
+          syncChunghoControls(row, preserveValue);
+        });
+      }
+
+      function refreshCatalogModes() {
+        refreshPlanCatalogMode(document.querySelector('[data-plan="1"]'));
+        refreshPlanCatalogMode(document.querySelector('[data-plan="2"]'));
+      }
 
       function findCatalogMatches(queryKey) {
         if (!queryKey) return [];
@@ -910,7 +1179,12 @@
         if (!catalogEntries.length) return;
         const row = input.closest(".row.data");
         if (!row) return;
+        const priceInput = row.querySelector(".price");
         const queryKey = normalizeModel(input.value.trim());
+        if (!queryKey && priceInput) {
+          priceInput.value = "";
+          updateAll();
+        }
         if (queryKey.length < 2) {
           hideSuggestions(row);
           return;
@@ -920,16 +1194,14 @@
           hideSuggestions(row);
           return;
         }
-        if (matches.length === 1) {
-          applyCatalogEntry(row, matches[0]);
-          hideSuggestions(row);
-          return;
-        }
         showSuggestions(row, input, matches);
       }
 
       const DRAFT_STORAGE_KEY = "price_compare_draft_v1";
+      const PENDING_REQUEST_KEY = "price_compare_pending_request_v1";
+      const DEFAULT_REMARKS = "@상품명 클릭하시면 카달로그 페이지로 이동 합니다";
       const MIN_DEFAULT_ROWS = 3;
+      const MAX_TEMPLATE_ROWS = 3;
       let allowDraftSave = false;
       let pendingDraft = null;
       let resumePrompted = false;
@@ -951,14 +1223,43 @@
         window.localStorage.removeItem(DRAFT_STORAGE_KEY);
       }
 
+      function readPendingRequest() {
+        try {
+          const raw = window.sessionStorage.getItem(PENDING_REQUEST_KEY);
+          return raw ? JSON.parse(raw) : null;
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function writePendingRequest(payload) {
+        try {
+          window.sessionStorage.setItem(
+            PENDING_REQUEST_KEY,
+            JSON.stringify(payload)
+          );
+        } catch (error) {}
+      }
+
+      function clearPendingRequest() {
+        try {
+          window.sessionStorage.removeItem(PENDING_REQUEST_KEY);
+        } catch (error) {}
+      }
+
       function draftHasContent(draft) {
         if (!draft) return false;
-        if (draft.recipient || draft.ext || draft.quote_date || draft.email) {
+        if (draft.recipient || draft.ext || draft.quote_date || draft.email || draft.remarks) {
           return true;
         }
+        if (draft.mode) return true;
         if ((draft.plan1?.rows || []).length) return true;
         if ((draft.plan2?.rows || []).length) return true;
         return false;
+      }
+
+      function getActiveMode() {
+        return document.querySelector(".mode-switch button.active")?.dataset.mode || "compare";
       }
 
       function collectDraft() {
@@ -966,15 +1267,19 @@
         const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
         const quoteDate = document.getElementById("quote-date")?.value ?? "";
         const email = document.getElementById("quote-email")?.value.trim() ?? "";
+        const remarks = document.getElementById("quote-remarks")?.value.trim() ?? "";
+        const mode = getActiveMode();
         const plan1El = document.querySelector('[data-plan="1"]');
         const plan2El = document.querySelector('[data-plan="2"]');
         const plan1 = collectPlanData(plan1El, "기존 요금");
         const plan2 = collectPlanData(plan2El, "제안 요금");
         return {
+          mode,
           recipient,
           ext,
           quote_date: quoteDate,
           email,
+          remarks,
           plan1,
           plan2,
           discount1: getDiscount(plan1El),
@@ -992,10 +1297,25 @@
         }
       }
 
+      function rememberPendingRequest(action) {
+        writePendingRequest({
+          action,
+          view:
+            document.querySelector(".menu button.active")?.dataset.view || "price",
+          draft: collectDraft(),
+          savedAt: Date.now(),
+        });
+      }
+
       function resetPlan(plan) {
         const table = plan.querySelector(".table");
         if (!table) return;
         table.querySelectorAll(".row.data").forEach((row) => row.remove());
+        plan.dataset.promoEnabled = "false";
+        const promoButton = plan.querySelector("[data-promo-toggle]");
+        if (promoButton) {
+          promoButton.classList.remove("is-active");
+        }
         for (let i = 0; i < MIN_DEFAULT_ROWS; i += 1) {
           table.appendChild(createRow());
         }
@@ -1009,7 +1329,10 @@
         const table = plan.querySelector(".table");
         if (!table) return;
         table.querySelectorAll(".row.data").forEach((row) => row.remove());
-        const totalRows = Math.max(rows.length, MIN_DEFAULT_ROWS);
+        const totalRows = Math.min(
+          Math.max(rows.length, MIN_DEFAULT_ROWS),
+          MAX_TEMPLATE_ROWS
+        );
         for (let i = 0; i < totalRows; i += 1) {
           const row = createRow();
           const data = rows[i];
@@ -1020,6 +1343,7 @@
           }
           table.appendChild(row);
         }
+        refreshPlanCatalogMode(plan);
         const radio = plan.querySelector(
           `.prepay input[type="radio"][value="${discountValue}"]`
         );
@@ -1034,10 +1358,13 @@
         const extInput = document.getElementById("quote-ext");
         const dateInput = document.getElementById("quote-date");
         const emailInput = document.getElementById("quote-email");
+        const remarksInput = document.getElementById("quote-remarks");
         if (recipientInput) recipientInput.value = draft.recipient ?? "";
         if (extInput) extInput.value = draft.ext ?? "";
         if (dateInput) dateInput.value = draft.quote_date ?? "";
         if (emailInput) emailInput.value = draft.email ?? "";
+        if (remarksInput) remarksInput.value = draft.remarks ?? "";
+        applyMode(draft.mode ?? "compare");
         const plan1El = document.querySelector('[data-plan="1"]');
         const plan2El = document.querySelector('[data-plan="2"]');
         if (plan1El) {
@@ -1046,23 +1373,39 @@
         if (plan2El) {
           applyPlanData(plan2El, draft.plan2?.rows || [], draft.discount2 ?? "0");
         }
+        refreshPlanCatalogMode(plan1El);
+        refreshPlanCatalogMode(plan2El);
         updateAll();
       }
 
       function clearForm() {
+        const currentMode = getActiveMode();
+        allowDraftSave = false;
+        pendingDraft = null;
+        clearDraft();
+        clearPendingRequest();
+        closeResumeModal();
+        stopPdfProgress(true, "");
+        setJobStatus("", "");
         const recipientInput = document.getElementById("quote-recipient");
         const extInput = document.getElementById("quote-ext");
         const dateInput = document.getElementById("quote-date");
         const emailInput = document.getElementById("quote-email");
+        const remarksInput = document.getElementById("quote-remarks");
         if (recipientInput) recipientInput.value = "";
         if (extInput) extInput.value = "";
         if (dateInput) dateInput.value = "";
         if (emailInput) emailInput.value = "";
+        if (remarksInput) remarksInput.value = DEFAULT_REMARKS;
+        applyMode(currentMode);
         const plan1El = document.querySelector('[data-plan="1"]');
         const plan2El = document.querySelector('[data-plan="2"]');
         if (plan1El) resetPlan(plan1El);
         if (plan2El) resetPlan(plan2El);
+        refreshCatalogModes();
         updateAll();
+        clearDraft();
+        allowDraftSave = true;
       }
 
       function openResumeModal(draft) {
@@ -1221,6 +1564,10 @@
       function updateSummary(total1, total2) {
         const summary =
           document.getElementById("summary-text") || document.getElementById("summary");
+        if (getActiveMode() === "single") {
+          summary.innerHTML = "✔ 단일 견적서 모드";
+          return;
+        }
         const plan2 = document.querySelector('[data-plan="2"]');
         const promoApplied = plan2?.dataset.promoEnabled === "true";
         const promoNote = promoApplied
@@ -1256,16 +1603,30 @@
         const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
         const quoteDate = document.getElementById("quote-date")?.value ?? "";
         const email = document.getElementById("quote-email")?.value.trim() ?? "";
+        const remarks = document.getElementById("quote-remarks")?.value.trim() ?? "";
+        const isSingle = getActiveMode() === "single";
         const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "기존 요금");
         const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "제안 요금");
+        const modeLabel = isSingle ? "단일견적서" : "비교견적서";
         return `
-          <div>수신: ${recipient || "-"}</div>
-          <div>내선번호: ${ext || "-"}</div>
-          <div>견적일: ${quoteDate || "-"}</div>
-          <div>이메일: ${email || "-"}</div>
+          <div>모드: ${modeLabel}</div>
+          <div>수신: ${escapeHtml(recipient || "-")}</div>
+          <div>내선번호: ${escapeHtml(ext || "-")}</div>
+          <div>견적일: ${escapeHtml(quoteDate || "-")}</div>
+          <div>이메일: ${escapeHtml(email || "-")}</div>
+          <div>특이사항: ${escapeHtml(remarks || "-")}</div>
           <div>기존 요금 총액: ${formatWon(plan1.total || 0)}</div>
-          <div>제안 요금 총액: ${formatWon(plan2.total || 0)}</div>
+          ${isSingle ? "" : `<div>제안 요금 총액: ${formatWon(plan2.total || 0)}</div>`}
         `;
+      }
+
+      function escapeHtml(value) {
+        return String(value ?? "")
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
       }
 
       function refreshQuoteSummary() {
@@ -1278,7 +1639,16 @@
         if (!window.PriceCompareBridge || !window.PriceCompareBridge.buildPayload) return;
         updateAll();
         refreshQuoteSummary();
+        const email = document.getElementById("quote-email")?.value.trim() ?? "";
+        if (!email) {
+          setQuoteJobStatus("error", "이메일 주소를 입력하세요.");
+          return;
+        }
+        setQuoteJobStatus("success", "견적서 PDF를 생성하고 이메일을 발송하는 중입니다.");
+        rememberPendingRequest("send_email");
+        startPdfProgress();
         const payload = window.PriceCompareBridge.buildPayload("send_email");
+        payload.data.mode = getActiveMode();
         payload.data.view = "quote";
         window.parent.postMessage({ source: "price-compare", payload }, "*");
       }
@@ -1327,6 +1697,7 @@
         const ext = document.getElementById("quote-ext")?.value.trim() ?? "";
         const quoteDate = document.getElementById("quote-date")?.value ?? "";
         const email = document.getElementById("quote-email")?.value.trim() ?? "";
+        const isSingle = getActiveMode() === "single";
 
         const plan1 = collectPlanData(document.querySelector('[data-plan="1"]'), "기존 요금");
         const plan2 = collectPlanData(document.querySelector('[data-plan="2"]'), "제안 요금");
@@ -1351,25 +1722,33 @@
         rows.push(["견적정보", "내선번호", ext]);
         rows.push(["견적정보", "견적일", quoteDate]);
         rows.push(["견적정보", "이메일", email]);
+        rows.push(["견적정보", "모드", isSingle ? "단일견적서" : "비교견적서"]);
         rows.push([]);
         rows.push(["구분", "안", "모델", "가격", "대수", "총가격"]);
         plan1.rows.forEach((item) => {
           rows.push(["제품", "기존 요금", item.model, item.price, item.qty, item.total]);
         });
-        plan2.rows.forEach((item) => {
-          rows.push(["제품", "제안 요금", item.model, item.price, item.qty, item.total]);
-        });
-        rows.push([]);
-        rows.push(["요약", "항목", "기존 요금", "제안 요금", "차이(제안-기존)", "판단"]);
-        rows.push(["요약", "월 총액", plan1.total, plan2.total, diff, monthlyJudge]);
-        rows.push([
-          "요약",
-          "연 환산",
-          plan1.total * 12,
-          plan2.total * 12,
-          diffYear,
-          yearlyJudge,
-        ]);
+        if (!isSingle) {
+          plan2.rows.forEach((item) => {
+            rows.push(["제품", "제안 요금", item.model, item.price, item.qty, item.total]);
+          });
+          rows.push([]);
+          rows.push(["요약", "항목", "기존 요금", "제안 요금", "차이(제안-기존)", "판단"]);
+          rows.push(["요약", "월 총액", plan1.total, plan2.total, diff, monthlyJudge]);
+          rows.push([
+            "요약",
+            "연 환산",
+            plan1.total * 12,
+            plan2.total * 12,
+            diffYear,
+            yearlyJudge,
+          ]);
+        } else {
+          rows.push([]);
+          rows.push(["요약", "항목", "단일 견적서", "", "", ""]);
+          rows.push(["요약", "월 총액", plan1.total, "", "", ""]);
+          rows.push(["요약", "연 환산", plan1.total * 12, "", "", ""]);
+        }
         return rows;
       }
 
@@ -1393,31 +1772,121 @@
         return `${month}월${day}일`;
       }
 
-      function downloadCsv() {
+      function downloadPdf() {
         updateAll();
-        const rows = buildCsvRows();
-        const csv = "\ufeff" + rows.map((row) => row.map(csvEscape).join(",")).join("\r\n");
-        const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
-        const url = URL.createObjectURL(blob);
-        const link = document.createElement("a");
-        const recipientName = document.getElementById("quote-recipient")?.value.trim() ?? "";
-        const quoteDate = document.getElementById("quote-date")?.value ?? "";
-        const recipientLabel = recipientName ? `${recipientName}귀하` : "견적서";
-        const dateLabel = formatKoreanDate(quoteDate);
-        const fileName = `${sanitizeFileNamePart(recipientLabel)}${dateLabel}.csv`;
-        link.href = url;
-        link.download = fileName;
-        document.body.appendChild(link);
-        link.click();
-        link.remove();
-        setTimeout(() => URL.revokeObjectURL(url), 1000);
+        if (!window.PriceCompareBridge || !window.PriceCompareBridge.buildPayload) return;
+        rememberPendingRequest("download_pdf");
+        startPdfProgress();
+        const payload = window.PriceCompareBridge.buildPayload("download_pdf");
+        payload.data.mode = getActiveMode();
+        window.parent.postMessage({ source: "price-compare", payload }, "*");
+      }
+
+      let pdfProgressTimer = null;
+      let pdfProgressStartedAt = 0;
+
+      function setPdfProgressState(title, text, widthPercent) {
+        const titleEl = document.getElementById("pdf-progress-title");
+        const textEl = document.getElementById("pdf-progress-text");
+        const barEl = document.getElementById("pdf-progress-bar");
+        if (titleEl) titleEl.textContent = title;
+        if (textEl) textEl.textContent = text;
+        if (barEl) barEl.style.width = `${Math.max(0, Math.min(100, widthPercent))}%`;
+      }
+
+      function setJobStatus(kind, message) {
+        const statusEl = document.getElementById("job-status");
+        if (!statusEl) return;
+        statusEl.classList.remove("is-error", "is-success", "is-visible");
+        if (!message) {
+          statusEl.textContent = "";
+          return;
+        }
+        statusEl.textContent = message;
+        statusEl.classList.add("is-visible");
+        statusEl.classList.add(kind === "error" ? "is-error" : "is-success");
+      }
+
+      function setQuoteJobStatus(kind, message) {
+        const statusEl = document.getElementById("quote-job-status");
+        if (!statusEl) return;
+        statusEl.classList.remove("is-error", "is-success", "is-visible");
+        statusEl.textContent = message || "";
+        if (!message) return;
+        statusEl.classList.add("is-visible");
+        statusEl.classList.add(kind === "error" ? "is-error" : "is-success");
+      }
+
+      function updatePdfProgressElapsed(elapsedSeconds) {
+        const elapsedEl = document.getElementById("pdf-progress-elapsed");
+        if (!elapsedEl) return;
+        elapsedEl.textContent = `${elapsedSeconds}초 경과`;
+      }
+
+      function tickPdfProgress() {
+        if (!pdfProgressStartedAt) return;
+        const elapsedSeconds = Math.floor((Date.now() - pdfProgressStartedAt) / 1000);
+        updatePdfProgressElapsed(elapsedSeconds);
+        if (elapsedSeconds < 3) {
+          setPdfProgressState("PDF 생성 중", "요청을 전송하는 중입니다.", 12);
+          return;
+        }
+        if (elapsedSeconds < 15) {
+          setPdfProgressState("PDF 생성 중", "엑셀 데이터를 정리하고 있습니다.", 28);
+          return;
+        }
+        if (elapsedSeconds < 45) {
+          setPdfProgressState("PDF 생성 중", "엑셀을 PDF로 변환하는 중입니다.", 56);
+          return;
+        }
+        if (elapsedSeconds < 90) {
+          setPdfProgressState("PDF 생성 중", "이미지와 견적서를 하나의 PDF로 합치는 중입니다.", 82);
+          return;
+        }
+        setPdfProgressState("PDF 생성 지연", "90초 이상 걸리고 있습니다. Excel 변환이 지연 중일 수 있습니다.", 94);
+      }
+
+      function startPdfProgress() {
+        const modal = document.getElementById("pdf-progress");
+        const exportBtn = document.getElementById("export-csv");
+        const quoteSend = document.getElementById("quote-send");
+        if (modal) modal.style.display = "flex";
+        if (exportBtn) exportBtn.disabled = true;
+        if (quoteSend) quoteSend.disabled = true;
+        setJobStatus("", "");
+        pdfProgressStartedAt = Date.now();
+        tickPdfProgress();
+        if (pdfProgressTimer) {
+          clearInterval(pdfProgressTimer);
+        }
+        pdfProgressTimer = setInterval(tickPdfProgress, 1000);
+      }
+
+      function stopPdfProgress(success, message) {
+        const modal = document.getElementById("pdf-progress");
+        const exportBtn = document.getElementById("export-csv");
+        const quoteSend = document.getElementById("quote-send");
+        if (pdfProgressTimer) {
+          clearInterval(pdfProgressTimer);
+          pdfProgressTimer = null;
+        }
+        pdfProgressStartedAt = 0;
+        if (exportBtn) exportBtn.disabled = false;
+        if (quoteSend) quoteSend.disabled = false;
+        if (modal) modal.style.display = "none";
+        const finalMessage = message || (success ? "PDF 생성이 완료되었습니다." : "작업이 실패했습니다.");
+        setJobStatus(success ? "success" : "error", finalMessage);
       }
 
       function createRow() {
         const row = document.createElement("div");
         row.className = "row data";
         row.innerHTML = `
-          <input class="cell model" type="text" />
+          <div class="cell model-slot">
+            <input class="model" type="text" />
+            <select class="chungho-select chungho-category" hidden></select>
+            <select class="chungho-select chungho-product" hidden disabled></select>
+          </div>
           <input class="cell price" type="number" min="0" />
           <input class="cell qty" type="number" min="0" />
           <div class="cell row-total">
@@ -1425,6 +1894,7 @@
             <button class="row-delete" type="button">삭제</button>
           </div>
         `;
+        syncChunghoControls(row, true);
         return row;
       }
 
@@ -1454,11 +1924,40 @@
       function updateAll() {
         const plan1 = document.querySelector('[data-plan="1"]');
         const plan2 = document.querySelector('[data-plan="2"]');
+        updateAddButtonState(plan1);
+        updateAddButtonState(plan2);
         updatePromoToggleState(plan2);
         syncPromotionRows(plan2);
         const total1 = updatePlan(plan1);
         const total2 = updatePlan(plan2);
         updateSummary(total1, total2);
+        refreshQuoteSummary();
+        saveDraft();
+      }
+
+      function updateAddButtonState(plan) {
+        if (!plan) return;
+        const addButton = plan.querySelector("[data-add]");
+        if (!addButton) return;
+        const rowCount = plan.querySelectorAll(".row.data:not(.promo)").length;
+        addButton.disabled = rowCount >= MAX_TEMPLATE_ROWS;
+        addButton.title = addButton.disabled
+          ? `제품은 최대 ${MAX_TEMPLATE_ROWS}개까지 입력할 수 있습니다.`
+          : "제품 추가";
+      }
+
+      function applyMode(mode) {
+        const nextMode = mode === "single" ? "single" : "compare";
+        const canvas = document.querySelector(".canvas");
+        if (canvas) {
+          canvas.classList.toggle("mode-single", nextMode === "single");
+          canvas.classList.toggle("mode-compare", nextMode !== "single");
+        }
+        document.querySelectorAll(".mode-switch button[data-mode]").forEach((btn) => {
+          btn.classList.toggle("active", btn.dataset.mode === nextMode);
+        });
+        refreshCatalogModes();
+        updateAll();
       }
 
       function setView(view) {
@@ -1499,6 +1998,12 @@
         });
       });
 
+      document.querySelectorAll(".mode-switch button[data-mode]").forEach((btn) => {
+        btn.addEventListener("click", () => {
+          applyMode(btn.dataset.mode);
+        });
+      });
+
       const guideButton = document.querySelector('.menu button[data-view="guide"]');
       if (guideButton) {
         const prevDivider = guideButton.previousElementSibling;
@@ -1514,7 +2019,11 @@
 
       const exportBtn = document.getElementById("export-csv");
       if (exportBtn) {
-        exportBtn.addEventListener("click", downloadCsv);
+        exportBtn.addEventListener("click", downloadPdf);
+      }
+      const resetBtn = document.getElementById("reset-form");
+      if (resetBtn) {
+        resetBtn.addEventListener("click", clearForm);
       }
 
       const quoteSend = document.getElementById("quote-send");
@@ -1543,8 +2052,24 @@
       window.addEventListener("message", (event) => {
         if (!event.data || event.data.source !== "price-compare-response") return;
         const payload = event.data.payload || {};
-        if (payload.type !== "message" || !payload.message) return;
-        alert(payload.message);
+        if (payload.type === "pdf") {
+          clearPendingRequest();
+          stopPdfProgress(true, payload.message || "PDF 생성이 완료되었습니다.");
+        } else if (payload.type === "message") {
+          clearPendingRequest();
+          stopPdfProgress(false, payload.message || "작업이 실패했습니다.");
+          setQuoteJobStatus("error", payload.message || "작업이 실패했습니다.");
+        } else if (payload.type === "success") {
+          clearPendingRequest();
+          stopPdfProgress(true, payload.message || "작업이 완료되었습니다.");
+          setQuoteJobStatus("success", payload.message || "작업이 완료되었습니다.");
+        }
+        if (payload.id) {
+          window.parent.postMessage(
+            { source: "price-compare-response-ack", response_id: payload.id },
+            "*"
+          );
+        }
       });
 
       const resumeYes = document.getElementById("resume-yes");
@@ -1571,6 +2096,11 @@
         input.addEventListener("input", saveDraft);
         input.addEventListener("change", saveDraft);
       });
+      const remarksInput = document.getElementById("quote-remarks");
+      if (remarksInput) {
+        remarksInput.addEventListener("input", saveDraft);
+        remarksInput.addEventListener("change", saveDraft);
+      }
 
       document.querySelectorAll(".plan").forEach((plan) => {
         plan.addEventListener("input", () => {
@@ -1598,6 +2128,11 @@
           });
         });
         plan.querySelector("[data-add]").addEventListener("click", () => {
+          const rowCount = plan.querySelectorAll(".row.data:not(.promo)").length;
+          if (rowCount >= MAX_TEMPLATE_ROWS) {
+            setJobStatus("error", `제품은 최대 ${MAX_TEMPLATE_ROWS}개까지 입력할 수 있습니다.`);
+            return;
+          }
           plan.querySelector(".table").appendChild(createRow());
           updateAll();
           saveDraft();
@@ -1608,6 +2143,30 @@
         if (!(event.target instanceof HTMLElement)) return;
         if (!event.target.classList.contains("model")) return;
         handleModelInput(event.target);
+      });
+
+      document.addEventListener("change", (event) => {
+        const target = event.target;
+        if (!(target instanceof HTMLElement)) return;
+        if (target.classList.contains("chungho-category")) {
+          const row = target.closest(".row.data");
+          if (!row) return;
+          const productSelect = row.querySelector(".chungho-product");
+          const modelInput = row.querySelector(".model");
+          populateChunghoProducts(productSelect, target.value, "");
+          if (modelInput) modelInput.value = "";
+          updateAll();
+          saveDraft();
+          return;
+        }
+        if (target.classList.contains("chungho-product")) {
+          const row = target.closest(".row.data");
+          if (!row) return;
+          const modelInput = row.querySelector(".model");
+          if (modelInput) modelInput.value = target.value || "";
+          updateAll();
+          saveDraft();
+        }
       });
 
       document.addEventListener("focusin", (event) => {
@@ -1642,10 +2201,29 @@
       });
 
       setDefaultQuoteDate();
-      const savedView = window.initialView || "price";
+      applyMode("compare");
+      requestAnimationFrame(refreshCatalogModes);
+      let pendingRequest = readPendingRequest();
+      if (
+        pendingRequest?.savedAt &&
+        Date.now() - Number(pendingRequest.savedAt) > 5 * 60 * 1000
+      ) {
+        clearPendingRequest();
+        pendingRequest = null;
+      }
+      const savedView = pendingRequest?.view || window.initialView || "price";
       setView(savedView);
-      updateAll();
-      maybePromptResume();
+      if (pendingRequest?.draft && draftHasContent(pendingRequest.draft)) {
+        allowDraftSave = true;
+        resumePrompted = true;
+        applyDraft(pendingRequest.draft);
+        if (pendingRequest.action === "download_pdf" || pendingRequest.action === "send_email") {
+          startPdfProgress();
+        }
+      } else {
+        updateAll();
+        maybePromptResume();
+      }
     </script>
   </body>
 </html>

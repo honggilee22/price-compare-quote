@@ -1,0 +1,405 @@
+[2026-06-12 02:57:34] handle_event start request_id=1781200654434 action=download_pdf
+[2026-06-12 02:57:35] handle_event build_excel_bytes_done request_id=1781200654434 elapsed=0.62s xlsx_bytes=81422 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 02:57:35] convert_excel_to_pdf start xlsx_bytes=81422
+[2026-06-12 02:57:35] handle_event exception request_id=1781200654434 elapsed=0.62s error=[WinError 5] 액세스가 거부되었습니다: 'C:\\Users\\jumsu\\AppData\\Local\\Temp\\tmp5ne5twxp'
+[2026-06-12 03:01:53] handle_event start request_id=1781200913883 action=download_pdf
+[2026-06-12 03:01:54] handle_event build_excel_bytes_done request_id=1781200913883 elapsed=0.68s xlsx_bytes=81425 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:01:54] convert_excel_to_pdf start xlsx_bytes=81425
+[2026-06-12 03:01:54] convert_excel_to_pdf tmp_dir=output\tmp_pdf_work
+[2026-06-12 03:01:54] convert_excel_to_pdf excel_subprocess_start
+[2026-06-12 03:02:57] convert_excel_to_pdf excel_failed returncode=1 stderr='Traceback (most recent call last):\n  File "<string>", line 16, in <module>\n    workbook = excel.Workbooks.Open(str(xlsx_path))\n  File "<COMObject <unknown>>", line 5, in Open\npywintypes.com_error: (-2147352567, \'예외가 발생했습니다.\', (0, \'Microsoft Excel\', "\'output\\\\tmp_pdf_work\\\\quote.xlsx\'을(를) 찾을 수 없습니다. 파일의 이름이 변경되었거나 파일이 이동 또는 삭제되지 않았는지 확인하세요.", \'xlmain11.chm\', 0, -2146827284), None)\n' stdout=''
+[2026-06-12 03:02:57] convert_excel_to_pdf failed errors=['Traceback (most recent call last):\n  File "<string>", line 16, in <module>\n    workbook = excel.Workbooks.Open(str(xlsx_path))\n  File "<COMObject <unknown>>", line 5, in Open\npywintypes.com_error: (-2147352567, \'예외가 발생했습니다.\', (0, \'Microsoft Excel\', "\'output\\\\tmp_pdf_work\\\\quote.xlsx\'을(를) 찾을 수 없습니다. 파일의 이름이 변경되었거나 파일이 이동 또는 삭제되지 않았는지 확인하세요.", \'xlmain11.chm\', 0, -2146827284), None)\n']
+[2026-06-12 03:02:57] handle_event exception request_id=1781200913883 elapsed=63.66s error=Traceback (most recent call last):
+  File "<string>", line 16, in <module>
+    workbook = excel.Workbooks.Open(str(xlsx_path))
+  File "<COMObject <unknown>>", line 5, in Open
+pywintypes.com_error: (-2147352567, '예외가 발생했습니다.', (0, 'Microsoft Excel', "'output\\tmp_pdf_work\\quote.xlsx'을(를) 찾을 수 없습니다. 파일의 이름이 변경되었거나 파일이 이동 또는 삭제되지 않았는지 확인하세요.", 'xlmain11.chm', 0, -2146827284), None)
+
+[2026-06-12 03:04:49] handle_event start request_id=1781201089895 action=download_pdf
+[2026-06-12 03:04:50] handle_event build_excel_bytes_done request_id=1781201089895 elapsed=0.65s xlsx_bytes=81426 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:04:50] convert_excel_to_pdf start xlsx_bytes=81426
+[2026-06-12 03:04:50] convert_excel_to_pdf tmp_dir=output\tmp_pdf_work
+[2026-06-12 03:04:50] convert_excel_to_pdf excel_subprocess_start
+[2026-06-12 03:05:52] convert_excel_to_pdf excel_failed returncode=1 stderr='Traceback (most recent call last):\n  File "<string>", line 16, in <module>\n    workbook = excel.Workbooks.Open(str(xlsx_path))\n  File "<COMObject <unknown>>", line 5, in Open\npywintypes.com_error: (-2147352567, \'예외가 발생했습니다.\', (0, \'Microsoft Excel\', "\'output\\\\tmp_pdf_work\\\\quote.xlsx\'을(를) 찾을 수 없습니다. 파일의 이름이 변경되었거나 파일이 이동 또는 삭제되지 않았는지 확인하세요.", \'xlmain11.chm\', 0, -2146827284), None)\n' stdout=''
+[2026-06-12 03:05:52] convert_excel_to_pdf failed errors=['Traceback (most recent call last):\n  File "<string>", line 16, in <module>\n    workbook = excel.Workbooks.Open(str(xlsx_path))\n  File "<COMObject <unknown>>", line 5, in Open\npywintypes.com_error: (-2147352567, \'예외가 발생했습니다.\', (0, \'Microsoft Excel\', "\'output\\\\tmp_pdf_work\\\\quote.xlsx\'을(를) 찾을 수 없습니다. 파일의 이름이 변경되었거나 파일이 이동 또는 삭제되지 않았는지 확인하세요.", \'xlmain11.chm\', 0, -2146827284), None)\n']
+[2026-06-12 03:05:52] handle_event exception request_id=1781201089895 elapsed=62.80s error=Traceback (most recent call last):
+  File "<string>", line 16, in <module>
+    workbook = excel.Workbooks.Open(str(xlsx_path))
+  File "<COMObject <unknown>>", line 5, in Open
+pywintypes.com_error: (-2147352567, '예외가 발생했습니다.', (0, 'Microsoft Excel', "'output\\tmp_pdf_work\\quote.xlsx'을(를) 찾을 수 없습니다. 파일의 이름이 변경되었거나 파일이 이동 또는 삭제되지 않았는지 확인하세요.", 'xlmain11.chm', 0, -2146827284), None)
+
+[2026-06-12 03:07:35] handle_event start request_id=1781201255590 action=download_pdf
+[2026-06-12 03:07:36] handle_event build_excel_bytes_done request_id=1781201255590 elapsed=0.72s xlsx_bytes=81421 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:07:36] convert_excel_to_pdf start xlsx_bytes=81421
+[2026-06-12 03:07:36] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work
+[2026-06-12 03:07:36] convert_excel_to_pdf excel_direct_start
+[2026-06-12 03:08:54] convert_excel_to_pdf excel_exception error=Open.Close
+[2026-06-12 03:08:54] convert_excel_to_pdf failed errors=['Excel 변환 실패: Open.Close']
+[2026-06-12 03:08:54] handle_event exception request_id=1781201255590 elapsed=78.49s error=Excel 변환 실패: Open.Close
+[2026-06-12 03:13:52] handle_event start request_id=1781201632577 action=download_pdf
+[2026-06-12 03:13:53] handle_event build_excel_bytes_done request_id=1781201632577 elapsed=0.60s xlsx_bytes=81421 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:13:53] convert_excel_to_pdf start xlsx_bytes=81421
+[2026-06-12 03:13:53] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work
+[2026-06-12 03:13:54] convert_excel_to_pdf excel_thread_start
+[2026-06-12 03:15:01] convert_excel_to_pdf excel_exception error=(-2147352567, '예외가 발생했습니다.', (0, 'Microsoft Excel', 'Workbooks 클래스 중 Open 메서드에 오류가 있습니다.', 'xlmain11.chm', 0, -2146827284), None)
+[2026-06-12 03:15:01] convert_excel_to_pdf failed errors=["Excel 변환 실패: (-2147352567, '예외가 발생했습니다.', (0, 'Microsoft Excel', 'Workbooks 클래스 중 Open 메서드에 오류가 있습니다.', 'xlmain11.chm', 0, -2146827284), None)"]
+[2026-06-12 03:15:01] handle_event exception request_id=1781201632577 elapsed=69.05s error=Excel 변환 실패: (-2147352567, '예외가 발생했습니다.', (0, 'Microsoft Excel', 'Workbooks 클래스 중 Open 메서드에 오류가 있습니다.', 'xlmain11.chm', 0, -2146827284), None)
+[2026-06-12 03:17:00] handle_event start request_id=1781201820933 action=download_pdf
+[2026-06-12 03:17:01] handle_event build_excel_bytes_done request_id=1781201820933 elapsed=0.61s xlsx_bytes=81424 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:17:01] convert_excel_to_pdf start xlsx_bytes=81424
+[2026-06-12 03:17:01] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work
+[2026-06-12 03:17:02] convert_excel_to_pdf script_file_start script=C:\Users\jumsu\AppData\Local\Temp\excel_to_pdf_run.py
+[2026-06-12 03:33:49] handle_event start request_id=1781202829122 action=download_pdf
+[2026-06-12 03:33:49] handle_event build_excel_bytes_done request_id=1781202829122 elapsed=0.50s xlsx_bytes=81421 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:33:49] convert_excel_to_pdf start xlsx_bytes=81421
+[2026-06-12 03:33:49] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_1xu1c9g3
+[2026-06-12 03:33:49] convert_excel_to_pdf excel_direct_start
+[2026-06-12 03:33:51] convert_excel_to_pdf excel_success elapsed=1.79s pdf_bytes=56974
+[2026-06-12 03:34:51] handle_event excel_pdf_done request_id=1781202829122 elapsed=62.62s quote_pdf_bytes=56974
+[2026-06-12 03:34:51] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 03:34:51] build_final_pdf done final_pages=3 final_bytes=4423779
+[2026-06-12 03:34:51] handle_event final_pdf_done request_id=1781202829122 elapsed=62.63s final_pdf_bytes=4423779
+[2026-06-12 03:49:45] handle_event start request_id=1781203785055 action=download_pdf
+[2026-06-12 03:49:45] handle_event build_excel_bytes_done request_id=1781203785055 elapsed=0.46s xlsx_bytes=81422 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:49:45] convert_excel_to_pdf start xlsx_bytes=81422
+[2026-06-12 03:49:45] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote__qc1n26f
+[2026-06-12 03:49:45] convert_excel_to_pdf excel_direct_start
+[2026-06-12 03:49:47] convert_excel_to_pdf excel_success elapsed=1.79s pdf_bytes=56974
+[2026-06-12 03:50:47] handle_event excel_pdf_done request_id=1781203785055 elapsed=62.48s quote_pdf_bytes=56974
+[2026-06-12 03:50:47] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 03:50:47] build_final_pdf done final_pages=3 final_bytes=4423779
+[2026-06-12 03:50:47] handle_event final_pdf_done request_id=1781203785055 elapsed=62.49s final_pdf_bytes=4423779
+[2026-06-12 03:52:16] handle_event start request_id=1781203936028 action=download_pdf
+[2026-06-12 03:52:16] handle_event build_excel_bytes_done request_id=1781203936028 elapsed=0.28s xlsx_bytes=27899 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:52:16] convert_excel_to_pdf start xlsx_bytes=27899
+[2026-06-12 03:52:16] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_esr_duk4
+[2026-06-12 03:52:16] convert_excel_to_pdf excel_direct_start
+[2026-06-12 03:52:17] convert_excel_to_pdf excel_success elapsed=1.62s pdf_bytes=61587
+[2026-06-12 03:53:18] handle_event excel_pdf_done request_id=1781203936028 elapsed=62.16s quote_pdf_bytes=61587
+[2026-06-12 03:53:18] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 03:53:18] build_final_pdf done final_pages=3 final_bytes=4425568
+[2026-06-12 03:53:18] handle_event final_pdf_done request_id=1781203936028 elapsed=62.18s final_pdf_bytes=4425568
+[2026-06-12 03:57:47] handle_event start request_id=1781204267194 action=download_pdf
+[2026-06-12 03:57:47] handle_event build_excel_bytes_done request_id=1781204267194 elapsed=0.24s xlsx_bytes=27900 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:57:47] convert_excel_to_pdf start xlsx_bytes=27900
+[2026-06-12 03:57:47] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_vusi3vc3
+[2026-06-12 03:57:47] convert_excel_to_pdf excel_direct_start
+[2026-06-12 03:57:49] convert_excel_to_pdf excel_success elapsed=1.82s pdf_bytes=61587
+[2026-06-12 03:58:49] handle_event excel_pdf_done request_id=1781204267194 elapsed=62.31s quote_pdf_bytes=61587
+[2026-06-12 03:58:49] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 03:58:49] build_final_pdf done final_pages=3 final_bytes=4425568
+[2026-06-12 03:58:49] handle_event final_pdf_done request_id=1781204267194 elapsed=62.33s final_pdf_bytes=4425568
+[2026-06-12 03:59:56] handle_event start request_id=1781204396311 action=download_pdf
+[2026-06-12 03:59:56] handle_event build_excel_bytes_done request_id=1781204396311 elapsed=0.25s xlsx_bytes=27900 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 03:59:56] convert_excel_to_pdf start xlsx_bytes=27900
+[2026-06-12 03:59:56] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_cqhprjwj
+[2026-06-12 03:59:56] convert_excel_to_pdf excel_direct_start
+[2026-06-12 03:59:58] convert_excel_to_pdf excel_success elapsed=1.86s pdf_bytes=61587
+[2026-06-12 03:59:58] handle_event excel_pdf_done request_id=1781204396311 elapsed=2.28s quote_pdf_bytes=61587
+[2026-06-12 03:59:58] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 03:59:58] build_final_pdf done final_pages=3 final_bytes=4425568
+[2026-06-12 03:59:58] handle_event final_pdf_done request_id=1781204396311 elapsed=2.30s final_pdf_bytes=4425568
+[2026-06-12 04:07:35] handle_event start request_id=check-too-many action=download_pdf
+[2026-06-12 04:07:35] handle_event start request_id=check-email action=send_email
+[2026-06-12 04:07:35] handle_event start request_id=check-download action=download_pdf
+[2026-06-12 04:07:36] handle_event build_excel_bytes_done request_id=check-download elapsed=0.20s xlsx_bytes=27813 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:07:36] convert_excel_to_pdf start xlsx_bytes=27813
+[2026-06-12 04:07:36] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_sh8ry97f
+[2026-06-12 04:07:36] convert_excel_to_pdf excel_direct_start
+[2026-06-12 04:07:37] convert_excel_to_pdf excel_success elapsed=1.73s pdf_bytes=57517
+[2026-06-12 04:08:38] handle_event excel_pdf_done request_id=check-download elapsed=62.18s quote_pdf_bytes=57517
+[2026-06-12 04:08:38] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:08:38] build_final_pdf done final_pages=3 final_bytes=4421561
+[2026-06-12 04:08:38] handle_event final_pdf_done request_id=check-download elapsed=62.19s final_pdf_bytes=4421561
+[2026-06-12 04:08:40] handle_event start request_id=1781204920263 action=download_pdf
+[2026-06-12 04:08:40] handle_event build_excel_bytes_done request_id=1781204920263 elapsed=0.24s xlsx_bytes=27934 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:08:40] convert_excel_to_pdf start xlsx_bytes=27934
+[2026-06-12 04:08:40] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_27xb5rmc
+[2026-06-12 04:08:40] convert_excel_to_pdf excel_direct_start
+[2026-06-12 04:08:42] convert_excel_to_pdf excel_success elapsed=1.61s pdf_bytes=63847
+[2026-06-12 04:08:44] handle_event excel_pdf_done request_id=1781204920263 elapsed=4.32s quote_pdf_bytes=63847
+[2026-06-12 04:08:44] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:08:44] build_final_pdf done final_pages=3 final_bytes=4426279
+[2026-06-12 04:08:44] handle_event final_pdf_done request_id=1781204920263 elapsed=4.35s final_pdf_bytes=4426279
+[2026-06-12 04:09:27] handle_event start request_id=check-too-many action=download_pdf
+[2026-06-12 04:09:27] handle_event start request_id=check-email action=send_email
+[2026-06-12 04:09:27] handle_event start request_id=check-download action=download_pdf
+[2026-06-12 04:09:27] handle_event build_excel_bytes_done request_id=check-download elapsed=0.19s xlsx_bytes=27810 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:09:27] convert_excel_to_pdf start xlsx_bytes=27810
+[2026-06-12 04:09:27] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_y3um48jk
+[2026-06-12 04:09:27] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:09:57] convert_excel_to_pdf excel_worker_timeout after 30s
+[2026-06-12 04:09:57] convert_excel_to_pdf failed errors=['Excel 변환 시간 초과(30초)']
+[2026-06-12 04:09:57] handle_event exception request_id=check-download elapsed=30.23s error=Excel 변환 시간 초과(30초)
+[2026-06-12 04:10:38] handle_event start request_id=1781205038728 action=download_pdf
+[2026-06-12 04:10:39] handle_event build_excel_bytes_done request_id=1781205038728 elapsed=0.26s xlsx_bytes=27933 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:10:39] convert_excel_to_pdf start xlsx_bytes=27933
+[2026-06-12 04:10:39] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_9h0lk4d0
+[2026-06-12 04:10:39] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:11:09] convert_excel_to_pdf excel_worker_timeout after 30s
+[2026-06-12 04:11:09] convert_excel_to_pdf failed errors=['Excel 변환 시간 초과(30초)']
+[2026-06-12 04:11:09] handle_event exception request_id=1781205038728 elapsed=30.30s error=Excel 변환 시간 초과(30초)
+[2026-06-12 04:12:08] handle_event start request_id=1781205128726 action=download_pdf
+[2026-06-12 04:12:09] handle_event build_excel_bytes_done request_id=1781205128726 elapsed=0.44s xlsx_bytes=81395 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:12:09] convert_excel_to_pdf start xlsx_bytes=81395
+[2026-06-12 04:12:09] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_exffbi8z
+[2026-06-12 04:12:09] convert_excel_to_pdf excel_direct_start
+[2026-06-12 04:12:10] convert_excel_to_pdf excel_success elapsed=1.77s pdf_bytes=56514
+[2026-06-12 04:13:11] handle_event excel_pdf_done request_id=1781205128726 elapsed=62.47s quote_pdf_bytes=56514
+[2026-06-12 04:13:11] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:13:11] build_final_pdf done final_pages=3 final_bytes=4423323
+[2026-06-12 04:13:11] handle_event final_pdf_done request_id=1781205128726 elapsed=62.48s final_pdf_bytes=4423323
+[2026-06-12 04:18:04] handle_event start request_id=final-integration-check action=download_pdf
+[2026-06-12 04:18:05] handle_event build_excel_bytes_done request_id=final-integration-check elapsed=0.20s xlsx_bytes=27856 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:18:05] convert_excel_to_pdf start xlsx_bytes=27856
+[2026-06-12 04:18:05] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_xxk0ocgc
+[2026-06-12 04:18:05] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:18:06] convert_excel_to_pdf excel_success elapsed=1.77s pdf_bytes=60792
+[2026-06-12 04:18:06] handle_event excel_pdf_done request_id=final-integration-check elapsed=2.00s quote_pdf_bytes=60792
+[2026-06-12 04:18:06] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:18:06] build_final_pdf done final_pages=3 final_bytes=4421672
+[2026-06-12 04:18:06] handle_event final_pdf_done request_id=final-integration-check elapsed=2.01s final_pdf_bytes=4421672
+[2026-06-12 04:21:14] handle_event start request_id=1781205674550 action=download_pdf
+[2026-06-12 04:21:14] handle_event build_excel_bytes_done request_id=1781205674550 elapsed=0.21s xlsx_bytes=27942 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:21:14] convert_excel_to_pdf start xlsx_bytes=27942
+[2026-06-12 04:21:14] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_ri4x0cdj
+[2026-06-12 04:21:14] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:21:16] convert_excel_to_pdf excel_success elapsed=1.76s pdf_bytes=63915
+[2026-06-12 04:21:16] handle_event excel_pdf_done request_id=1781205674550 elapsed=1.99s quote_pdf_bytes=63915
+[2026-06-12 04:21:16] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:21:16] build_final_pdf done final_pages=3 final_bytes=4426304
+[2026-06-12 04:21:16] handle_event final_pdf_done request_id=1781205674550 elapsed=2.01s final_pdf_bytes=4426304
+[2026-06-12 04:26:17] handle_event start request_id=1781205977557 action=download_pdf
+[2026-06-12 04:26:17] handle_event build_excel_bytes_done request_id=1781205977557 elapsed=0.25s xlsx_bytes=27945 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:26:17] convert_excel_to_pdf start xlsx_bytes=27945
+[2026-06-12 04:26:17] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_9xqfu9cn
+[2026-06-12 04:26:17] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:26:19] convert_excel_to_pdf excel_success elapsed=1.93s pdf_bytes=64157
+[2026-06-12 04:26:19] handle_event excel_pdf_done request_id=1781205977557 elapsed=2.20s quote_pdf_bytes=64157
+[2026-06-12 04:26:19] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:26:19] build_final_pdf done final_pages=3 final_bytes=4426545
+[2026-06-12 04:26:19] handle_event final_pdf_done request_id=1781205977557 elapsed=2.22s final_pdf_bytes=4426545
+[2026-06-12 04:27:14] handle_event start request_id=1781206034220 action=download_pdf
+[2026-06-12 04:27:14] handle_event build_excel_bytes_done request_id=1781206034220 elapsed=0.66s xlsx_bytes=81420 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:27:14] convert_excel_to_pdf start xlsx_bytes=81420
+[2026-06-12 04:27:14] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_dk2cqapo
+[2026-06-12 04:27:14] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:27:16] convert_excel_to_pdf excel_success elapsed=1.85s pdf_bytes=58219
+[2026-06-12 04:27:16] handle_event excel_pdf_done request_id=1781206034220 elapsed=2.54s quote_pdf_bytes=58219
+[2026-06-12 04:27:16] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:27:16] build_final_pdf done final_pages=3 final_bytes=4423692
+[2026-06-12 04:27:16] handle_event final_pdf_done request_id=1781206034220 elapsed=2.56s final_pdf_bytes=4423692
+[2026-06-12 04:37:10] bridge request_received request_id=1781206630785 action=download_pdf
+[2026-06-12 04:37:10] handle_event start request_id=1781206630785 action=download_pdf
+[2026-06-12 04:37:11] handle_event build_excel_bytes_done request_id=1781206630785 elapsed=0.49s xlsx_bytes=81383 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:37:11] convert_excel_to_pdf start xlsx_bytes=81383
+[2026-06-12 04:37:11] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_mj2i1rto
+[2026-06-12 04:37:11] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:37:13] convert_excel_to_pdf excel_success elapsed=2.12s pdf_bytes=53006
+[2026-06-12 04:37:13] handle_event excel_pdf_done request_id=1781206630785 elapsed=2.63s quote_pdf_bytes=53006
+[2026-06-12 04:37:13] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:37:13] build_final_pdf done final_pages=3 final_bytes=4419806
+[2026-06-12 04:37:13] handle_event final_pdf_done request_id=1781206630785 elapsed=2.64s final_pdf_bytes=4419806
+[2026-06-12 04:37:14] bridge response_ack response_id=1781206630785
+[2026-06-12 04:38:12] bridge request_received request_id=1781206692741 action=download_pdf
+[2026-06-12 04:38:12] handle_event start request_id=1781206692741 action=download_pdf
+[2026-06-12 04:38:13] handle_event build_excel_bytes_done request_id=1781206692741 elapsed=0.42s xlsx_bytes=81380 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:38:13] convert_excel_to_pdf start xlsx_bytes=81380
+[2026-06-12 04:38:13] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_3sr7ts36
+[2026-06-12 04:38:13] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:38:15] convert_excel_to_pdf excel_success elapsed=2.09s pdf_bytes=53006
+[2026-06-12 04:38:15] handle_event excel_pdf_done request_id=1781206692741 elapsed=2.53s quote_pdf_bytes=53006
+[2026-06-12 04:38:15] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:38:15] build_final_pdf done final_pages=3 final_bytes=4419806
+[2026-06-12 04:38:15] handle_event final_pdf_done request_id=1781206692741 elapsed=2.55s final_pdf_bytes=4419806
+[2026-06-12 04:38:15] bridge response_ack response_id=1781206692741
+[2026-06-12 04:40:48] convert_excel_to_pdf start xlsx_bytes=28408
+[2026-06-12 04:40:48] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_q1bpi1j_
+[2026-06-12 04:40:48] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:40:50] convert_excel_to_pdf excel_success elapsed=2.06s pdf_bytes=73945
+[2026-06-12 04:41:11] convert_excel_to_pdf start xlsx_bytes=28407
+[2026-06-12 04:41:11] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_o9nlkv0r
+[2026-06-12 04:41:11] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:41:13] convert_excel_to_pdf excel_success elapsed=2.00s pdf_bytes=73945
+[2026-06-12 04:41:13] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:41:13] build_final_pdf done final_pages=3 final_bytes=4433013
+[2026-06-12 04:41:13] convert_excel_to_pdf start xlsx_bytes=81956
+[2026-06-12 04:41:13] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_kmscmyw9
+[2026-06-12 04:41:13] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:41:15] convert_excel_to_pdf excel_success elapsed=2.05s pdf_bytes=66969
+[2026-06-12 04:41:15] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:41:15] build_final_pdf done final_pages=3 final_bytes=4429474
+[2026-06-12 04:47:12] bridge request_received request_id=1781207232298 action=download_pdf
+[2026-06-12 04:47:12] handle_event start request_id=1781207232298 action=download_pdf
+[2026-06-12 04:47:12] handle_event build_excel_bytes_done request_id=1781207232298 elapsed=0.22s xlsx_bytes=28411 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:47:12] convert_excel_to_pdf start xlsx_bytes=28411
+[2026-06-12 04:47:12] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_nix77e1k
+[2026-06-12 04:47:12] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:47:14] convert_excel_to_pdf excel_success elapsed=1.98s pdf_bytes=68568
+[2026-06-12 04:47:14] handle_event excel_pdf_done request_id=1781207232298 elapsed=2.23s quote_pdf_bytes=68568
+[2026-06-12 04:47:14] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:47:14] build_final_pdf done final_pages=3 final_bytes=4428928
+[2026-06-12 04:47:14] handle_event final_pdf_done request_id=1781207232298 elapsed=2.26s final_pdf_bytes=4428928
+[2026-06-12 04:47:15] bridge response_ack response_id=1781207232298
+[2026-06-12 04:48:27] convert_excel_to_pdf start xlsx_bytes=28078
+[2026-06-12 04:48:27] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_ax7zzm3q
+[2026-06-12 04:48:27] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:48:29] convert_excel_to_pdf excel_success elapsed=2.13s pdf_bytes=58098
+[2026-06-12 04:48:29] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:48:29] build_final_pdf done final_pages=3 final_bytes=4421415
+[2026-06-12 04:48:30] convert_excel_to_pdf start xlsx_bytes=81720
+[2026-06-12 04:48:30] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_3p4bwaxs
+[2026-06-12 04:48:30] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:48:32] convert_excel_to_pdf excel_success elapsed=2.12s pdf_bytes=52777
+[2026-06-12 04:48:32] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:48:32] build_final_pdf done final_pages=3 final_bytes=4419101
+[2026-06-12 04:53:10] bridge request_received request_id=1781207590795 action=download_pdf
+[2026-06-12 04:53:10] handle_event start request_id=1781207590795 action=download_pdf
+[2026-06-12 04:53:11] handle_event build_excel_bytes_done request_id=1781207590795 elapsed=0.35s xlsx_bytes=28125 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 04:53:11] convert_excel_to_pdf start xlsx_bytes=28125
+[2026-06-12 04:53:11] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_r4e2pfdg
+[2026-06-12 04:53:11] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:53:13] convert_excel_to_pdf excel_success elapsed=1.93s pdf_bytes=63128
+[2026-06-12 04:53:13] handle_event excel_pdf_done request_id=1781207590795 elapsed=2.30s quote_pdf_bytes=63128
+[2026-06-12 04:53:13] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 04:53:13] build_final_pdf done final_pages=3 final_bytes=4423448
+[2026-06-12 04:53:13] handle_event final_pdf_done request_id=1781207590795 elapsed=2.32s final_pdf_bytes=4423448
+[2026-06-12 04:53:13] bridge response_ack response_id=1781207590795
+[2026-06-12 04:56:04] bridge request_received request_id=1781207764570 action=send_email
+[2026-06-12 04:56:04] handle_event start request_id=1781207764570 action=send_email
+[2026-06-12 04:56:04] bridge response_ack response_id=1781207764570
+[2026-06-12 04:56:06] bridge request_received request_id=1781207766931 action=send_email
+[2026-06-12 04:56:06] handle_event start request_id=1781207766931 action=send_email
+[2026-06-12 04:56:07] bridge response_ack response_id=1781207766931
+[2026-06-12 04:56:08] bridge request_received request_id=1781207768426 action=send_email
+[2026-06-12 04:56:08] handle_event start request_id=1781207768426 action=send_email
+[2026-06-12 04:56:08] bridge response_ack response_id=1781207768426
+[2026-06-12 04:56:09] bridge request_received request_id=1781207769704 action=send_email
+[2026-06-12 04:56:09] handle_event start request_id=1781207769704 action=send_email
+[2026-06-12 04:56:09] bridge response_ack response_id=1781207769704
+[2026-06-12 04:56:44] bridge request_received request_id=1781207804411 action=send_email
+[2026-06-12 04:56:44] handle_event start request_id=1781207804411 action=send_email
+[2026-06-12 04:56:44] bridge response_ack response_id=1781207804411
+[2026-06-12 04:57:20] convert_excel_to_pdf start xlsx_bytes=27816
+[2026-06-12 04:57:20] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_wx86q0pl
+[2026-06-12 04:57:20] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:57:22] convert_excel_to_pdf excel_success elapsed=2.51s pdf_bytes=55803
+[2026-06-12 04:58:04] convert_excel_to_pdf start xlsx_bytes=27884
+[2026-06-12 04:58:04] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_inueoi8r
+[2026-06-12 04:58:04] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:58:07] convert_excel_to_pdf excel_success elapsed=2.57s pdf_bytes=197643
+[2026-06-12 04:58:25] convert_excel_to_pdf start xlsx_bytes=27883
+[2026-06-12 04:58:25] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_pcrht6wl
+[2026-06-12 04:58:25] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:58:28] convert_excel_to_pdf excel_success elapsed=2.25s pdf_bytes=197643
+[2026-06-12 04:58:28] convert_excel_to_pdf start xlsx_bytes=81488
+[2026-06-12 04:58:28] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_aqz0hinw
+[2026-06-12 04:58:28] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:58:31] convert_excel_to_pdf excel_success elapsed=2.31s pdf_bytes=192638
+[2026-06-12 04:58:42] bridge request_received request_id=1781207922605 action=send_email
+[2026-06-12 04:58:42] handle_event start request_id=1781207922605 action=send_email
+[2026-06-12 04:58:42] bridge response_ack response_id=1781207922605
+[2026-06-12 04:58:58] convert_excel_to_pdf start xlsx_bytes=27887
+[2026-06-12 04:58:58] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_s9lyi7di
+[2026-06-12 04:58:58] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:59:00] convert_excel_to_pdf excel_success elapsed=2.52s pdf_bytes=197645
+[2026-06-12 04:59:01] convert_excel_to_pdf start xlsx_bytes=81490
+[2026-06-12 04:59:01] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_zwlkxaga
+[2026-06-12 04:59:01] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:59:04] convert_excel_to_pdf excel_success elapsed=2.54s pdf_bytes=192638
+[2026-06-12 04:59:43] convert_excel_to_pdf start xlsx_bytes=27886
+[2026-06-12 04:59:43] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_9bembqqf
+[2026-06-12 04:59:43] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:59:45] convert_excel_to_pdf excel_success elapsed=2.26s pdf_bytes=197645
+[2026-06-12 04:59:46] convert_excel_to_pdf start xlsx_bytes=81490
+[2026-06-12 04:59:46] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_g5l_az7w
+[2026-06-12 04:59:46] convert_excel_to_pdf excel_worker_start
+[2026-06-12 04:59:48] convert_excel_to_pdf excel_success elapsed=2.46s pdf_bytes=192638
+[2026-06-12 05:00:51] bridge request_received request_id=1781208051286 action=download_pdf
+[2026-06-12 05:00:51] handle_event start request_id=1781208051286 action=download_pdf
+[2026-06-12 05:00:51] handle_event build_excel_bytes_done request_id=1781208051286 elapsed=0.26s xlsx_bytes=27823 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 05:00:51] convert_excel_to_pdf start xlsx_bytes=27823
+[2026-06-12 05:00:51] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_52wigetp
+[2026-06-12 05:00:51] convert_excel_to_pdf excel_worker_start
+[2026-06-12 05:00:53] convert_excel_to_pdf excel_success elapsed=2.32s pdf_bytes=58115
+[2026-06-12 05:00:53] handle_event excel_pdf_done request_id=1781208051286 elapsed=2.63s quote_pdf_bytes=36695
+[2026-06-12 05:00:53] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 05:00:53] build_final_pdf done final_pages=3 final_bytes=4420019
+[2026-06-12 05:00:53] handle_event final_pdf_done request_id=1781208051286 elapsed=2.65s final_pdf_bytes=4420019
+[2026-06-12 05:00:54] bridge response_ack response_id=1781208051286
+[2026-06-12 05:02:47] bridge request_received request_id=1781208167704 action=send_email
+[2026-06-12 05:02:47] handle_event start request_id=1781208167704 action=send_email
+[2026-06-12 05:02:47] handle_event build_excel_bytes_done request_id=1781208167704 elapsed=0.22s xlsx_bytes=27673 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 05:02:47] convert_excel_to_pdf start xlsx_bytes=27673
+[2026-06-12 05:02:47] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_ibsuj4pf
+[2026-06-12 05:02:47] convert_excel_to_pdf excel_worker_start
+[2026-06-12 05:02:50] convert_excel_to_pdf excel_success elapsed=2.36s pdf_bytes=196429
+[2026-06-12 05:02:50] handle_event excel_pdf_done request_id=1781208167704 elapsed=2.61s quote_pdf_bytes=196429
+[2026-06-12 05:02:50] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 05:02:50] build_final_pdf done final_pages=3 final_bytes=4561846
+[2026-06-12 05:02:50] handle_event final_pdf_done request_id=1781208167704 elapsed=2.64s final_pdf_bytes=4561846
+[2026-06-12 05:03:15] bridge response_ack response_id=1781208167704
+[2026-06-12 05:05:31] handle_event start request_id=email-empty-check action=send_email
+[2026-06-12 05:05:31] handle_event send_email_rejected request_id=email-empty-check reason=missing_email
+[2026-06-12 07:22:42] bridge request_received request_id=1781216562778 action=send_email
+[2026-06-12 07:22:42] handle_event start request_id=1781216562778 action=send_email
+[2026-06-12 07:22:43] handle_event build_excel_bytes_done request_id=1781216562778 elapsed=0.30s xlsx_bytes=27866 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 07:22:43] convert_excel_to_pdf start xlsx_bytes=27866
+[2026-06-12 07:22:43] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_a29zz6p4
+[2026-06-12 07:22:43] convert_excel_to_pdf excel_worker_start
+[2026-06-12 07:22:46] convert_excel_to_pdf excel_success elapsed=3.71s pdf_bytes=58698
+[2026-06-12 07:22:46] handle_event excel_pdf_done request_id=1781216562778 elapsed=4.05s quote_pdf_bytes=39591
+[2026-06-12 07:22:46] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 07:22:46] build_final_pdf done final_pages=3 final_bytes=4422913
+[2026-06-12 07:22:46] handle_event final_pdf_done request_id=1781216562778 elapsed=4.08s final_pdf_bytes=4422913
+[2026-06-12 07:23:11] handle_event send_email_success request_id=1781216562778 to=jumsune1@naver.com
+[2026-06-12 07:23:11] bridge response_ack response_id=1781216562778
+[2026-06-12 07:27:57] bridge request_received request_id=1781216877697 action=download_pdf
+[2026-06-12 07:27:57] handle_event start request_id=1781216877697 action=download_pdf
+[2026-06-12 07:27:58] handle_event build_excel_bytes_done request_id=1781216877697 elapsed=0.73s xlsx_bytes=81504 mode=single plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 07:27:58] convert_excel_to_pdf start xlsx_bytes=81504
+[2026-06-12 07:27:58] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_r20kkqim
+[2026-06-12 07:27:58] convert_excel_to_pdf excel_worker_start
+[2026-06-12 07:28:00] convert_excel_to_pdf excel_success elapsed=2.53s pdf_bytes=58415
+[2026-06-12 07:28:01] handle_event excel_pdf_done request_id=1781216877697 elapsed=3.30s quote_pdf_bytes=40009
+[2026-06-12 07:28:01] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 07:28:01] build_final_pdf done final_pages=3 final_bytes=4423333
+[2026-06-12 07:28:01] handle_event final_pdf_done request_id=1781216877697 elapsed=3.32s final_pdf_bytes=4423333
+[2026-06-12 07:28:01] bridge response_ack response_id=1781216877697
+[2026-06-12 07:36:15] bridge request_received request_id=1781217375125 action=download_pdf
+[2026-06-12 07:36:15] handle_event start request_id=1781217375125 action=download_pdf
+[2026-06-12 07:36:15] handle_event build_excel_bytes_done request_id=1781217375125 elapsed=0.38s xlsx_bytes=28007 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 07:36:15] convert_excel_to_pdf start xlsx_bytes=28007
+[2026-06-12 07:36:15] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_f9g55zvg
+[2026-06-12 07:36:15] convert_excel_to_pdf excel_worker_start
+[2026-06-12 07:36:17] convert_excel_to_pdf excel_success elapsed=2.25s pdf_bytes=62393
+[2026-06-12 07:36:17] handle_event excel_pdf_done request_id=1781217375125 elapsed=2.68s quote_pdf_bytes=43292
+[2026-06-12 07:36:17] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 07:36:17] build_final_pdf done final_pages=3 final_bytes=4426614
+[2026-06-12 07:36:17] handle_event final_pdf_done request_id=1781217375125 elapsed=2.70s final_pdf_bytes=4426614
+[2026-06-12 07:36:18] bridge response_ack response_id=1781217375125
+[2026-06-12 07:37:00] bridge request_received request_id=1781217420108 action=download_pdf
+[2026-06-12 07:37:00] handle_event start request_id=1781217420108 action=download_pdf
+[2026-06-12 07:37:00] handle_event build_excel_bytes_done request_id=1781217420108 elapsed=0.30s xlsx_bytes=28001 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 07:37:00] convert_excel_to_pdf start xlsx_bytes=28001
+[2026-06-12 07:37:00] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_pnpmo0dw
+[2026-06-12 07:37:00] convert_excel_to_pdf excel_worker_start
+[2026-06-12 07:37:02] convert_excel_to_pdf excel_success elapsed=2.08s pdf_bytes=61962
+[2026-06-12 07:37:02] handle_event excel_pdf_done request_id=1781217420108 elapsed=2.42s quote_pdf_bytes=42860
+[2026-06-12 07:37:02] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 07:37:02] build_final_pdf done final_pages=3 final_bytes=4426182
+[2026-06-12 07:37:02] handle_event final_pdf_done request_id=1781217420108 elapsed=2.44s final_pdf_bytes=4426182
+[2026-06-12 07:37:03] bridge response_ack response_id=1781217420108
+[2026-06-12 07:38:23] bridge request_received request_id=1781217503266 action=send_email
+[2026-06-12 07:38:23] handle_event start request_id=1781217503266 action=send_email
+[2026-06-12 07:38:23] handle_event build_excel_bytes_done request_id=1781217503266 elapsed=0.29s xlsx_bytes=28002 mode=compare plan1_rows=3 plan2_rows=3 promo=False
+[2026-06-12 07:38:23] convert_excel_to_pdf start xlsx_bytes=28002
+[2026-06-12 07:38:23] convert_excel_to_pdf tmp_dir=C:\Users\jumsu\Desktop\견적서\1\price-compare-quote-main\output\tmp_pdf_work\quote_j5oedzq6
+[2026-06-12 07:38:23] convert_excel_to_pdf excel_worker_start
+[2026-06-12 07:38:26] convert_excel_to_pdf excel_success elapsed=3.06s pdf_bytes=61962
+[2026-06-12 07:38:26] handle_event excel_pdf_done request_id=1781217503266 elapsed=3.39s quote_pdf_bytes=42860
+[2026-06-12 07:38:26] build_final_pdf intro_pages=2 quote_pages=1
+[2026-06-12 07:38:26] build_final_pdf done final_pages=3 final_bytes=4426182
+[2026-06-12 07:38:26] handle_event final_pdf_done request_id=1781217503266 elapsed=3.41s final_pdf_bytes=4426182
+[2026-06-12 07:38:49] handle_event send_email_success request_id=1781217503266 to=lilyloveless13@korea.kr
+[2026-06-12 07:38:49] bridge response_ack response_id=1781217503266
